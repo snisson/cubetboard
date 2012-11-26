@@ -80,7 +80,7 @@ if (!empty($_POST)) {
                             echo '<p class="error">' . $error . '</p>';
                         }
                         ?>
-                        <span class="hint" style="color:#FF5858;font-size: 13px">* All fields are mandatory, except the database prefix</span>
+                        <span class="hint" style="color:#FF5858;font-size: 13px">* All fields are mandatory</span>
                     </div>
 
                     <div class="middle">
