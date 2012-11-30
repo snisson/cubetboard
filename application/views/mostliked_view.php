@@ -69,6 +69,7 @@
             $('#comment_button_'+board_id).hide();
         }
     }
+    /*
     function addComment(board_id,type)
     {
         if(type=="comment")
@@ -98,6 +99,7 @@
             });
         });
     }
+    */
     function doAction(userid,pinid,type)
     {   val = 'pin_id='+pinid+'&source_user_id='+userid+'&like_user_id='+logId;
         if(type=="like")
@@ -160,6 +162,59 @@
             })
         }
     }
+    
+    /* 
+         * Code added by Rahul@cubettech.com
+         * Add comment.
+         */
+
+        $(".act_comment").live("click", function() {
+            var string = $(this).attr('id');
+            var substr = string.split('-');
+            var board_id = substr[1];
+            $('#'+board_id).html("<a href='#' class='convo_img'><img src="+logImage+" alt='image' /></a><textarea name='comment_"+board_id+"' id='comment_"+board_id+"' onkeyup='showbutton("+board_id+")'  cols=20 rows=1 ></textarea><p class='txt_right_align'><button class='button4' type='button' name='comment_button' id='comment_button_"+board_id+"' onclick='comment("+board_id+")'><span class='counter'><span>Comment</span></span></button> </p>");
+            $('#comment_button_'+board_id).hide();
+            $('a#comment-'+board_id).hide();
+            $('a#uncomment-'+board_id).show();
+            $('#'+board_id).show();
+        
+            $('#comment_'+board_id).focus();
+            var $alpha = $('#alpha');
+            $alpha.imagesLoaded( function(){
+                $alpha.masonry({
+                    itemSelector: '.pin_item',
+                    isFitWidth: true,
+                    isAnimatedFromBottom: true
+                    //isAnimated: true
+                });
+            });
+        });
+    
+        /* 
+         * Code added by Rahul@cubettech.com
+         * uncomment.
+         */
+
+        $(".act_uncomment").live("click", function() {
+            var string = $(this).attr('id');
+            var substr = string.split('-');
+            var board_id = substr[1];
+            $(".enter_comm").hide();
+            $('#'+board_id).empty();
+            $('a#comment-'+board_id).show();
+            $('a#uncomment-'+board_id).hide();
+        
+            $('#comment_'+board_id).focus();
+            var $alpha = $('#alpha');
+            $alpha.imagesLoaded( function(){
+                $alpha.masonry({
+                    itemSelector: '.pin_item',
+                    isFitWidth: true,
+                    isAnimatedFromBottom: true
+                    //isAnimated: true
+                });
+            });
+        });
 </script>
 <?php $this->load->view('popup_js'); ?>
 <div class="white_strip"></div>
@@ -226,8 +281,10 @@
 
                                     <?php $commentId = 'comment-' . $pinDetails->id ?>
                                     <?php $uncommentId = 'uncomment-' . $pinDetails->id ?>
-                                    <a class="act_comment" id="<?php echo $commentId ?>" href="javascript:;" onClick="addComment(<?php echo $pinDetails->id; ?>,'comment')" ><span>Comment</span></a>
-                                    <a class="act_uncomment" id="<?php echo $uncommentId ?>" href="javascript:;" onClick="addComment(<?php echo $pinDetails->id; ?>,'uncomment')" ><span>Uncomment</span></a>
+<!--                                <a class="act_comment" id="<?php //echo $commentId ?>" href="javascript:;" onClick="addComment(<?php //echo $pinDetails->id; ?>,'comment')" ><span>Comment</span></a>
+                                    <a class="act_uncomment" id="<?php //echo $uncommentId ?>" href="javascript:;" onClick="addComment(<?php //echo $pinDetails->id; ?>,'uncomment')" ><span>Uncomment</span></a>-->
+                                    <a class="act_comment" id="<?php echo $commentId ?>" href="javascript:void(0);" ><span>Comment</span></a>
+                                    <a class="act_uncomment" id="<?php echo $uncommentId ?>" href="javascript:void(0);" ><span>Uncomment</span></a>
                                 </div>
                             <?php endif; ?>
 
