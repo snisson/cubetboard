@@ -25,6 +25,7 @@
                                            </span>
 
                                         </li>
+                                        <br style="clear: both;"/>
                                         <li>
                                             <span id="submit_id">
                                                 <input type="button" name="sumbit" value="submit" id="submit" class="Button2 Button13 WhiteButton" onclick="return validateLogin()"/>
