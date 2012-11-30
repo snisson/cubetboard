@@ -190,7 +190,16 @@
 
                             <li class="float-right">
                                 <span class="profile-thumb-nav">
-                                    <a href="<?php echo site_url('user/index/'.$loggedUserDetails['userId']);?>"><img src="<?php echo $loggedUserDetails['image']; ?>?type=large" alt="Profile Picture of <?php echo $loggedUserDetails['name']; ?>" width="24" height="24" />
+                                    <?php
+                                    /* Code added by Rahul@Cubet technology */
+                                    $profile = substr($loggedUserDetails['image'], (strripos($loggedUserDetails['image'],'/')+1), strlen($loggedUserDetails['image']));
+                                    if (file_exists(dirname(dirname(__FILE__)).'/assets/images/'.$profile)){
+                                        $image_url = $loggedUserDetails['image'].'?type=large';
+                                     }else{
+                                        $image_url = site_url().'application/assets/images/User.png?type=large';
+                                     }
+                                    ?>
+                                    <a href="<?php echo site_url('user/index/'.$loggedUserDetails['userId']);?>"><img src="<?php echo $image_url; ?>" title="Profile Picture of <?php echo $loggedUserDetails['name']; ?>" width="24" height="24" />
                                     </a>
                                 </span>
                             </li>
