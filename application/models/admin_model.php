@@ -493,10 +493,10 @@ class Admin_model extends CI_Model {
      * @since  : 23-05-2012
      * @return :
      */
-    function saveSettings($_POST,$id)
+    function saveSettings($post,$id)
     {
         $this->db->where('id', $id);
-        $this->db->update('config', $_POST);
+        $this->db->update('config', $post);
         return true;
     }
     /**
