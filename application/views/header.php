@@ -95,13 +95,7 @@
                     <?php if($this->session->userdata('login_user_id')):?>
                     <div class="search_box">
                         <form action="<?php echo site_url('search/filter')?>" method="post">
-        <!--                    search by
-                            <select name="filter">
-                                <option>pins</option>
-                                <option>boards</option>
-                                <option>users</option>
-                            </select>-->
-        <!--                    <a id="query_button" href="#" class="lg"><img src="https://a248.e.akamai.net/passets.pinterest.com.s3.amazonaws.com/images/search.gif" alt="" /></a>-->
+
                             <input name="q" type="text" class="form-field-input" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" value="Search...."/>
                            
                             <input name="Search" class="search_button" type="submit" src="images/search_icon.png" value=""/>
@@ -157,18 +151,7 @@
                                 <li>
                                     <a href="<?php echo site_url('pins/videos')?>">Videos</a>
                                 </li>
-                                <li>
-                                    <a href="<?php echo site_url('gift/index/0/100')?>">Gifts</a>
-                                    <ul>
-                                        <li><a href="<?php echo site_url('gift/index/0/100')?>">$0 - $100</a></li>
-                                        <li><a href="<?php echo site_url('gift/index/100/500')?>">$100 - $500</a></li>
-                                        <li><a class="divider" href="<?php echo site_url('gift/index/500/1000')?>">$500 - $1000</a></li>
-                                        <li><a href="<?php echo site_url('gift/index/1000/10000')?>">$1000 - $10000</a></li>
-                                        <li><a href="<?php echo site_url('gift/index/10000/50000')?>">$10000 - $50000</a></li>
-                                        <li><a class="divider" href="<?php echo site_url('gift/index/50000/100000')?>">$50000 - $100000</a></li>
-                                        <li><a href="<?php echo site_url('gift/index/100000/above')?>">$100000 above</a></li>
-                                    </ul>
-                                </li>
+                                
                             <li style="width: 60px;">
                                 <a class="nav-add" href="#">Add</a>
                                 <ul>
@@ -176,17 +159,6 @@
                                     <li class="beforeDivider"><a href="<?php echo site_url('pins/uploadPins')?>" class="ajax" >Upload a pin</a></li>
                                 </ul>
                             </li>
-
-<!--                        <li>
-                                <a class="nav-about" href="<?php //echo site_url();?>welcome/underconstruction">About</a>
-                                <ul>
-                                    <li><a href="<?php //echo site_url();?>welcome/underconstruction">Help</a></li>
-                                    <li><a href="<?php //echo site_url();?>welcome/underconstruction">Pin it button</a></li>
-                                    <li><a href="<?php //echo site_url();?>welcome/underconstruction">Team</a></li>
-                                    <li><a href="<?php //echo site_url();?>welcome/underconstruction">Blog</a></li>
-                                    
-                                </ul>
-                            </li>-->
 
                             <li class="float-right">
                                 <span class="profile-thumb-nav">
