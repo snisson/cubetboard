@@ -365,7 +365,7 @@
             loading: {
 
                 finishedMsg: 'No more pages to load.',
-                img: 'http://i.imgur.com/6RMhx.gif'
+                img: '<?php echo site_url(); ?>/application/assets/images/ajax_loader_blue.gif'
             }
         },
 
