@@ -211,7 +211,7 @@ function doAction(userid,pinid,type)
                             <!--Display the pin image-->
                             <div class="pin_img">
                                 <?php if($activityValue->type=='video'):?>
-                                        <div class="video"></div>
+                                        <div class="video"><a href="<?php echo site_url()?>board/pins/<?php echo $activityValue->board_id.'/'. $activityValue->id;?>/view" class="fancyboxForm1 ajax"></a></div>
                                 <?php endif?>
                                 <a href="<?php echo site_url()?>board/pins/<?php echo $activityValue->board_id.'/'. $activityValue->id;?>/view" class="fancyboxForm1 ajax">
                                     <img src="<?php echo $activityValue->pin_url;?>"  />

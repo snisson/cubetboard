@@ -325,7 +325,7 @@
                     <!--Display pin image -->
                     <div class="pin_img">
                         <?php if ($value->type == 'video'): ?>
-                            <div class="video"></div>
+                        <div class="video"><a href="<?php echo site_url() ?>board/pins/<?php echo $boardId . '/' . $value->id; ?>/view"  class="fancyboxForm1 ajax">&nbsp;</a></div>
                         <?php endif ?>
                         <a href="<?php echo site_url() ?>board/pins/<?php echo $boardId . '/' . $value->id; ?>/view"  class="fancyboxForm1 ajax"><img src="<?php echo $value->pin_url; ?>"  /></a>
                     </div>

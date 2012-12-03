@@ -299,7 +299,7 @@ function addComment(board_id,type)
 
                         <div class="pin_img">
                             <?php if ($boardPinValue->type == 'video'): ?>
-                                <div class="video" style="top:8%;left:7%;"></div>
+                            <div class="video" style="top:8%;left:7%;"><a href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view" class="ajax">&nbsp;</a></div>
                             <?php endif ?>
                             <a href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view" class="ajax">
                                 <img src="<?php echo $boardPinValue->pin_url; ?>" alt="<?php echo $boardPinValue->description; ?>" class="PinImageImg"  />

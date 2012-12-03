@@ -263,7 +263,7 @@
                                 <!--Display pin image -->
                                 <div class="pin_img">
                                     <?php if ($activityValue->type == 'video'): ?>
-                                        <div class="video" style="top:21%;left:5%;"></div>
+                                    <div class="video" style="top:21%;left:5%;"><a href="<?php echo site_url() ?>board/pins/<?php echo $activityValue->board_id . '/' . $activityValue->id; ?>/view" class="fancyboxForm1 ajax">&nbsp;</a></div>
                                     <?php endif ?>
                                     <a href="<?php echo site_url() ?>board/pins/<?php echo $activityValue->board_id . '/' . $activityValue->id; ?>/view" class="fancyboxForm1 ajax"><img src="<?php echo $activityValue->pin_url; ?>"  /></a>
                                 </div>

@@ -256,7 +256,7 @@
                                 <!--Display pin image -->
                                 <div class="pin_img">
                                     <?php if ($boardPinValue->type == 'video'): ?>
-                                        <div class="video" style="top:21%;left:5%;"></div>
+                                    <div class="video" style="top:21%;left:5%;"><a href="<?php echo site_url() ?>board/pins/<?php echo $boardPinValue->board_id . '/' . $boardPinValue->id; ?>/view" class="ajax">&nbsp;</a></div>
                                     <?php endif ?>
                                     <a href="<?php echo site_url() ?>board/pins/<?php echo $boardPinValue->board_id . '/' . $boardPinValue->id; ?>/view" class="ajax"><img src="<?php echo $boardPinValue->pin_url; ?>"  /></a>
                                 </div>

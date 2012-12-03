@@ -276,7 +276,7 @@
 
                         <div class="pin_img">
                             <?php if ($searchResultValue->type == 'video'): ?>
-                                <div class="video" style="top:21%;left:5%;"></div>
+                            <div class="video" style="top:21%;left:5%;"><a href="<?php echo site_url() ?>board/pins/<?php echo $searchResultValue->board_id . '/' . $searchResultValue->id; ?>/view" class="fancyboxForm1 ajax">&nbsp;</a></div>
                             <?php endif ?>
                             <a href="<?php echo site_url() ?>board/pins/<?php echo $searchResultValue->board_id . '/' . $searchResultValue->id; ?>/view" class="fancyboxForm1 ajax">
                                 <img src="<?php echo $searchResultValue->pin_url; ?>"  />

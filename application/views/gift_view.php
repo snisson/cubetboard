@@ -270,7 +270,7 @@
                         <!--Display pin image -->
                         <div class="pin_img">
                             <?php if ($giftPinValue->type == 'video'): ?>
-                                <div class="video" style="top:21%;left:5%;"></div>
+                            <div class="video" style="top:21%;left:5%;"><a href="<?php echo site_url() ?>board/pins/<?php echo $giftPinValue->board_id . '/' . $giftPinValue->id; ?>/view" class="fancyboxForm1 ajax">&nbsp;</a></div>
                             <?php endif ?>
                             <a href="<?php echo site_url() ?>board/pins/<?php echo $giftPinValue->board_id . '/' . $giftPinValue->id; ?>/view" class="fancyboxForm1 ajax">
                                 <img src="<?php echo $giftPinValue->pin_url; ?>"  width="190px"/>
