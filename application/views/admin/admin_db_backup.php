@@ -17,7 +17,7 @@
                                 <form action="<?php echo site_url("administrator/dbBackup") ?>" method=POST>
                                 <select multiple name="options[]">
                                  <?php foreach($tables as $value):?>
-                                         <option><?php echo $value->Tables_in_cubettec_board; ?></option>
+                                         <option><?php echo current((array)$value); ?></option>
                                  <?php endforeach;?>
                                 </select>
                                 <br><br>
