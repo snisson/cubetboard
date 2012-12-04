@@ -52,8 +52,8 @@ function handleDesc(type)
                     </div>
                     <div class="prof-details-right-wrap">
                         <div class="pinit_button">
-                            <!--<a onclick="alert('Drag me to the bookarks bar'); return false;" href="javascript:(function(){var%20s%20=%20document.createElement('script');s.src%20=%20'http://staging.cubettech.com/ci/pinterest/application/scripts/extractor.js';document.body.appendChild(s);})();">Pin it</a>-->
-                            <a onclick="alert('Drag me to the bookarks bar'); return false;" href="javascript:(function(){var%20s%20=%20document.createElement('script');s.src%20=%20'<?php echo site_url()?>application/scripts/extractor.js';document.body.appendChild(s);})();">Pin it</a>
+                            <!--<a onclick="alert('Drag me to the bookmarks bar'); return false;" href="javascript:(function(){var%20s%20=%20document.createElement('script');s.src%20=%20'http://staging.cubettech.com/ci/pinterest/application/scripts/extractor.js';document.body.appendChild(s);})();">Pin it</a>-->
+                            <a onclick="alert('Drag me to the bookmarks bar'); return false;" href="javascript:(function(){var%20s%20=%20document.createElement('script');s.src%20=%20'<?php echo site_url()?>application/scripts/extractor.js';document.body.appendChild(s);})();">Pin it</a>
                             <span class="pinit-button-icon"></span>
                         </div>
                     </div>
