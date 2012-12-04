@@ -172,7 +172,7 @@
 
                     <?php $board = getUserBoard($id);?>
                         <?php if(is_array($board)):?>
-                            <?php foreach($board as $key=>$value):?>
+                            <?php foreach($board as $key=>$value): $index = $key+1; ?>
                                  <li id="ID_<?php echo $value->id; ?>" class="move">
                                     <div class="pinBoard">
                                         <div class="pin_inner_container">
@@ -292,6 +292,9 @@
                                         </div>
                                     </div>
                                 </li>
+                            <?php if($index % 3 == 0){ ?>   
+                                <div class="clear"></div>
+                            <?php } ?>     
                             <?php endforeach;?>
                         <?php endif;?>
                     </ul>
