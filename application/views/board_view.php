@@ -357,7 +357,7 @@
                             <?php $boardDetails = getBoardDetails($value->board_id); ?>
                             <a href="<?php echo site_url('user/index/' . $value->user_id) ?>"><?php echo $userDetails['name'] ?></a>
                             <?php if ($value->source_url != ""): ?>
-                                Via <a href="<?php echo $value->source_url; ?>"><?php echo $source; ?></a>
+                                Via <a target="_blank" href="<?php echo $value->source_url; ?>"><?php echo $source; ?></a>
                             <?php endif; ?>
                             onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
                                 <?php echo $boardDetails->board_name; ?></a>

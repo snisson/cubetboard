@@ -300,7 +300,7 @@
                                     <?php $boardDetails = getBoardDetails($pinDetails->board_id); ?>
                                     <a href="<?php echo site_url('user/index/' . $pinDetails->user_id) ?>"><?php echo $userDetails['name'] ?></a>
                                     <?php if ($pinDetails->source_url != ""): ?>
-                                        Via <a href="<?php echo $pinDetails->source_url; ?>"><?php echo $source; ?></a>
+                                        Via <a target="_blank" href="<?php echo $pinDetails->source_url; ?>"><?php echo $source; ?></a>
                                     <?php endif; ?>
                                     onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
                                         <?php echo $boardDetails->board_name; ?></a>

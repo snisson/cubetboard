@@ -293,7 +293,7 @@
                                 <?php $source = GetDomain($sourcePinValue->source_url); ?>
                                 <?php $boardDetails = getBoardDetails($sourcePinValue->board_id); ?>
                                 <a href="<?php echo site_url('user/index/' . $sourcePinValue->user_id) ?>"><?php echo $userDetails['name'] ?></a>
-                                Via <a href="<?php echo $sourcePinValue->source_url; ?>"><?php echo $source; ?></a>
+                                Via <a target="_blank" href="<?php echo $sourcePinValue->source_url; ?>"><?php echo $source; ?></a>
                                 onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
                                     <?php echo $boardDetails->board_name; ?></a>
                             </p>

@@ -329,7 +329,7 @@ function addComment(board_id,type)
                                 <?php $boardDetails = getBoardDetails($boardPinValue->board_id); ?>
                                 <a href="<?php echo site_url('user/index/' . $boardPinValue->user_id) ?>"><?php echo $userDetails['name'] ?></a>
                                 <?php if ($boardPinValue->source_url != ""): ?>
-                                    Via <a href="<?php echo $boardPinValue->source_url; ?>"><?php echo $source; ?></a>
+                                    Via <a target="_blank" href="<?php echo $boardPinValue->source_url; ?>"><?php echo $source; ?></a>
                                 <?php endif; ?>
                                 onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
                                     <?php echo $boardDetails->board_name; ?></a>

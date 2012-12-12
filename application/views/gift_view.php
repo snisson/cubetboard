@@ -308,7 +308,7 @@
                                 <?php $boardDetails = getBoardDetails($giftPinValue->board_id); ?>
                                 <a href="<?php echo site_url('user/index/' . $giftPinValue->user_id) ?>"><?php echo $userDetails['name'] ?></a>
                                 <?php if ($giftPinValue->source_url != ""): ?>
-                                    Via <a href="<?php echo $giftPinValue->source_url; ?>"><?php echo $gift; ?></a>
+                                    Via <a target="_blank" href="<?php echo $giftPinValue->source_url; ?>"><?php echo $gift; ?></a>
                                 <?php endif; ?>
                                 onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
                                     <?php echo $boardDetails->board_name; ?></a>

@@ -311,7 +311,7 @@
                                 <?php $gift = GetDomain($searchResultValue->pin_url); ?>
                                 <?php $boardDetails = getBoardDetails($searchResultValue->board_id); ?>
                                 <a href="<?php echo site_url('user/index/' . $searchResultValue->user_id) ?>"><?php echo $userDetails['name'] ?></a>
-                                Via <a href="<?php echo $searchResultValue->pin_url; ?>"><?php echo $gift; ?></a>
+                                Via <a target="_blank" href="<?php echo $searchResultValue->pin_url; ?>"><?php echo $gift; ?></a>
                                 onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
                                     <?php echo $boardDetails->board_name; ?></a>
                             </p>

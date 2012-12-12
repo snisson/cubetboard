@@ -244,7 +244,7 @@ function doAction(userid,pinid,type)
                                     <?php $boardDetails = getBoardDetails($activityValue->board_id);?>
                                     <a href="<?php echo site_url('user/index/'.$activityValue->user_id)?>"><?php echo $userDetails['name']?></a>
                                      <?php if($activityValue->source_url!=""):?>
-                                        Via <a href="<?php echo $activityValue->source_url;?>"><?php echo $source;?></a>
+                                        Via <a target="_blank" href="<?php echo $activityValue->source_url;?>"><?php echo $source;?></a>
                                     <?php endif;?>
                                     onto <a   href="<?php echo site_url('board/index/'.$boardDetails->id)?>">
                                     <?php echo $boardDetails->board_name;?></a>
