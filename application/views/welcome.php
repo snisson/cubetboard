@@ -70,42 +70,11 @@
         }
 
     }
-    /*
-function addComment(board_id,type)
-{
-    if(type=="comment")
-    {
-        //$("textarea.coment_"+board_id).textlimit(20);
-        $('#'+board_id).html("<a href='#' class='convo_img'><img src="+logImage+" alt='image' /></a><textarea name='comment_"+board_id+"' id='comment_"+board_id+"' onkeyup='showbutton("+board_id+")'  cols=20 rows=1 ></textarea><p class='txt_right_align'><button class='button4' type='button' name='comment_button' id='comment_button_"+board_id+"' onclick='comment("+board_id+")'><span class='counter'><span>Comment</span></span></button> </p>");
-        $('#comment_button_'+board_id).hide();
-        $('a#comment-'+board_id).hide();
-        $('a#uncomment-'+board_id).show();
-        $('#'+board_id).show();
-   }
-    else
-    {
-        $(".enter_comm").hide();
-        $('#'+board_id).empty();
-        $('a#comment-'+board_id).show();
-        $('a#uncomment-'+board_id).hide();
-
-    }
-    $('#comment_'+board_id).focus();
-    var $alpha = $('#alpha');
-    $alpha.imagesLoaded( function(){
-    $alpha.masonry({
-    itemSelector: '.pin_item',
-    isFitWidth: true,
-    isAnimatedFromBottom: true
-
-    //isAnimated: true
-    });
-    });
-    }
-
-     */
+   
+    
     function doAction(userid,pinid,type)
-    {   val = 'pin_id='+pinid+'&source_user_id='+userid+'&like_user_id='+logId;
+    {   
+        val = 'pin_id='+pinid+'&source_user_id='+userid+'&like_user_id='+logId;
         if(type=="like")
         {
             $.ajax({
@@ -166,9 +135,11 @@ function addComment(board_id,type)
             })
         }
     }
+    
 </script>
 <?php if ($this->session->userdata('login_user_id')) { ?>
     <script type="text/javascript">
+                
         /* 
          * Code added by Rahul K Murali@Cubet Technologies
          * Add comment.
@@ -183,7 +154,7 @@ function addComment(board_id,type)
             $('a#comment-'+board_id).hide();
             $('a#uncomment-'+board_id).show();
             $('#'+board_id).show();
-            
+                
             $('#comment_'+board_id).focus();
             var $alpha = $('#alpha');
             $alpha.imagesLoaded( function(){
@@ -195,7 +166,7 @@ function addComment(board_id,type)
                 });
             });
         });
-        
+            
         /* 
          * Code added by Rahul K Murali@Cubet Technologies
          * uncomment.
@@ -209,7 +180,7 @@ function addComment(board_id,type)
             $('#'+board_id).empty();
             $('a#comment-'+board_id).show();
             $('a#uncomment-'+board_id).hide();
-            
+                
             $('#comment_'+board_id).focus();
             var $alpha = $('#alpha');
             $alpha.imagesLoaded( function(){
@@ -221,6 +192,7 @@ function addComment(board_id,type)
                 });
             });
         });
+            
     </script>
 <?php } ?>
 <div id="top"></div>
@@ -239,9 +211,6 @@ function addComment(board_id,type)
             <div id="home_info"><label><h2 style="font-size: 25px;">Cubetboard is an online pinboard. Organize and share things you love.</h2></label></div>
         <?php endif; ?>
     </div>
-
-
-
     <div id="Container" style="margin-top:105px;">
         <div class="container Mcenter clearfix transitions-enabled masonry" id="alpha" style="height: 6247px; width: 1392px;">
 
@@ -251,6 +220,7 @@ function addComment(board_id,type)
                     <?php $boardDetails = getBoardDetails($boardPinValue->board_id); ?>
                     <?php $comments = getPinComments($boardPinValue->id); ?>
                     <div class="pin_item">
+                        <?php $this->load->view('popup_js'); ?>
                         <?php if (!$this->session->userdata('login_user_id')): ?>
                             <div class="action">
                                 <span id="like_action">
@@ -290,16 +260,14 @@ function addComment(board_id,type)
 
                                 <?php $commentId = 'comment-' . $boardPinValue->id ?>
                                 <?php $uncommentId = 'uncomment-' . $boardPinValue->id ?>
-                        <!--                <a class="act_comment" id="<?php //echo $commentId   ?>" href="javascript:;" onClick="addComment(<?php //echo $boardPinValue->id;   ?>,'comment')" ><span>Comment</span></a>
-                                            <a class="act_uncomment" id="<?php //echo $uncommentId   ?>" href="javascript:;" onClick="addComment(<?php //echo $boardPinValue->id;   ?>,'uncomment')" ><span>Uncomment</span></a>-->
-                                <a class="act_comment" id="<?php echo $commentId ?>" href="javascript:void(0);" ><span>Comment</span></a>
-                                <a class="act_uncomment" id="<?php echo $uncommentId ?>" href="javascript:void(0);" ><span>Uncomment</span></a>
+                                <a class="act_comment" id="<?php echo $commentId ?>" href="javascript:;" onClick="addComment(<?php echo $boardPinValue->id; ?>,'comment')" ><span>Comment</span></a>
+                                <a class="act_uncomment" id="<?php echo $uncommentId ?>" href="javascript:;" onClick="addComment(<?php echo $boardPinValue->id; ?>,'uncomment')" ><span>Uncomment</span></a>
                             </div>
                         <?php endif; ?>
 
                         <div class="pin_img">
                             <?php if ($boardPinValue->type == 'video'): ?>
-                            <div class="video" style="top:8%;left:7%;"><a href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view" class="ajax">&nbsp;</a></div>
+                                <div class="video" style="top:8%;left:7%;"><a href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view" class="ajax">&nbsp;</a></div>
                             <?php endif ?>
                             <a href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view" class="ajax">
                                 <img src="<?php echo $boardPinValue->pin_url; ?>" alt="<?php echo $boardPinValue->description; ?>" class="PinImageImg"  />
@@ -329,7 +297,7 @@ function addComment(board_id,type)
                                 <?php $boardDetails = getBoardDetails($boardPinValue->board_id); ?>
                                 <a href="<?php echo site_url('user/index/' . $boardPinValue->user_id) ?>"><?php echo $userDetails['name'] ?></a>
                                 <?php if ($boardPinValue->source_url != ""): ?>
-                                    Via <a target="_blank" href="<?php echo $boardPinValue->source_url; ?>"><?php echo $source; ?></a>
+                                    Via <a href="<?php echo $boardPinValue->source_url; ?>"><?php echo $source; ?></a>
                                 <?php endif; ?>
                                 onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
                                     <?php echo $boardDetails->board_name; ?></a>
@@ -358,7 +326,7 @@ function addComment(board_id,type)
                             <div id="<?php echo $commentBoxId; ?>"></div>
                         <?php endif ?>
                         <div class="convo_blk enter_comm" id="<?php echo $boardPinValue->id; ?>"></div>
-
+                        <div class="clear"></div>
 
                     </div>
 
@@ -371,7 +339,6 @@ function addComment(board_id,type)
 
 </div><!-- closing middlebanner -->
 <?php $this->load->view('footer'); ?>
-
 <script type="text/javascript">
     $(function(){
 
@@ -410,6 +377,28 @@ function addComment(board_id,type)
                 $alpha.masonry( 'appended', $newElems, true );
                 $("a.act_uncomment").hide();
                 $(".enter_comm").hide();
+                //Examples of how to assign the ColorBox event to elements
+                $(".group1").colorbox({rel:'group1'});
+                $(".group2").colorbox({rel:'group2', transition:"fade"});
+                $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+                $(".group4").colorbox({rel:'group4', slideshow:true});
+                $(".ajax").colorbox({scrolling:false,transition:"elastic"});
+                $(".youtube").colorbox({iframe:true, innerWidth:425, innerHeight:344});
+                $(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+                $(".inline").colorbox({inline:true, width:"50%"});
+                $(".callbacks").colorbox({
+                    onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+                    onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+                    onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+                    onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+                    onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+                });
+
+                //Example of preserving a JavaScript event for inline calls.
+                $("#click").click(function(){
+                    $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+                    return false;
+                });
 
             });
         }
@@ -436,5 +425,3 @@ function addComment(board_id,type)
 <nav id="page-nav">
     <a href="<?php echo site_url(); ?>welcome/index/<?php echo $offset; ?>"></a>
 </nav>
-<!--<div id=i1><span id="e1">Item 1</span></div>
-<div id=i2><span id="e2">Item 2</span></div>-->
