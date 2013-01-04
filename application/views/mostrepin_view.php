@@ -38,10 +38,6 @@
                     //comment count
                     $("#comment_count_"+pinid).empty();
                     $("#comment_count_"+pinid).html(data[0]+" Comment");
-
-                    $("#count_comment_"+pinid).empty();
-                    $("#count_comment_"+pinid).html("<a href=http://products.cogzidel.com/pinterest-clone/con_home/viewpin/"+pinid+">All "+commentinfo[4]+" Comments...</a>");
-                    $("div[id=comments_box_"+pinid+"]:last").append("<div class='convo_blk comments'><a class='convo_img' href='#'><img src="+logImage+" height='50' width='50'/></a><a href="+baseUrl+"'user/index/'"+logId+"><strong>"+commentinfo[0]+" </strong></a>"+commentinfo[1]+"</div> ");
                     var $alpha = $('#alpha');
                     $alpha.imagesLoaded( function(){
                         $alpha.masonry({
@@ -52,6 +48,9 @@
                             //isAnimated: true
                         });
                     });
+                    $("#count_comment_"+pinid).empty();
+                    $("#count_comment_"+pinid).html("<a href=http://products.cogzidel.com/pinterest-clone/con_home/viewpin/"+pinid+">All "+commentinfo[4]+" Comments...</a>");
+                    $("#comments_box_"+pinid).append("<div class='convo_blk comments'><a class='convo_img' href='#'><img src="+logImage+" height='50' width='50'/></a><a href="+baseUrl+"'user/index/'"+logId+"><strong>"+commentinfo[0]+" </strong></a>"+commentinfo[1]+"</div> ");
                 }
             }
         })
@@ -59,6 +58,7 @@
     }
     function showbutton(board_id)
     {
+
         $comment = $('#comment_'+board_id).val();
         if($comment!="" && $('#comment_'+board_id).val().length >=1)
         {
@@ -68,10 +68,13 @@
         {
             $('#comment_button_'+board_id).hide();
         }
+
     }
+   
     
     function doAction(userid,pinid,type)
-    {   val = 'pin_id='+pinid+'&source_user_id='+userid+'&like_user_id='+logId;
+    {   
+        val = 'pin_id='+pinid+'&source_user_id='+userid+'&like_user_id='+logId;
         if(type=="like")
         {
             $.ajax({
@@ -132,9 +135,11 @@
             })
         }
     }
+    
 </script>
 <?php if ($this->session->userdata('login_user_id')) { ?>
-    <script type="text/javascript">    
+    <script type="text/javascript">
+                
         /* 
          * Code added by Rahul K Murali@Cubet Technologies
          * Add comment.
@@ -187,8 +192,10 @@
                 });
             });
         });
+            
     </script>
 <?php } ?>
+<div id="top"></div>
 <?php $this->load->view('popup_js'); ?>
 <div class="white_strip"></div>
 
@@ -196,149 +203,140 @@
 
 <div class="middle-banner_bg"><!-- staing middlebanner -->
 
-    <!-- Display the information about the page-->
     <div class="home_text">
-        <div id="home_info"><label><h2 style="font-size: 32px;">Most repined pins</h2></label></div>
+        <?php if (isset($invalid)): ?>
+
+            <div id="home_info"><label><h2 style="color: #d20000;font-weight: bold;"><?php echo $invalid ?></h2></label></div>
+        <?php else: ?>
+            <div id="home_info"><label><h2 style="font-size: 25px;">Cubetboard is an online pinboard. Organize and share things you love.</h2></label></div>
+        <?php endif; ?>
     </div>
+    <div id="Container" style="margin-top:105px;">
+        <div class="container Mcenter clearfix transitions-enabled masonry" id="alpha" style="height: 6247px; width: 1392px;">
 
-    <div id="Container" style="margin-top: 136px;">
-        <div id="alpha" class="container Mcenter clearfix transitions-enabled masonry">
-            <?php $repinPin = getMostRepinned(); ?>
-            <?php if (is_array($repinPin)): ?>
-                <?php foreach ($repinPin as $repinPinKey => $repinPinValue): ?>
-                    <?php
-                    $pinDetails = getPinDetails($repinPinValue->from_pin_id);
-                    /* if contion added by rahul@cubettech.com */
-                    if (!empty($pinDetails)) {
-                        ?>
-                        <?php $comments = getPinComments($pinDetails->id); ?>
-                        <div class="pin_item">
+            <?php $boardPin = $pins; ?>
+            <?php if (is_array($boardPin)): ?>
+                <?php foreach ($boardPin as $boardPinKey => $boardPinValue): ?>
+                    <?php $boardDetails = getBoardDetails($boardPinValue->board_id); ?>
+                    <?php $comments = getPinComments($boardPinValue->id); ?>
+                    <div class="pin_item">
+                        <?php $this->load->view('popup_js'); ?>
+                        <?php if (!$this->session->userdata('login_user_id')): ?>
+                            <div class="action">
+                                <span id="like_action">
+                                    <a class="act_like ajax" href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view"><span>Like</span></a>
+                                </span>
+                                <a class="fancyboxForm act_repin ajax" href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view">Repin</a>
+                                <a class="act_comment ajax" href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view" ><span>Comment</span></a>
+                            </div>
+                        <?php else: ?>
+                            <div class="action">
+                                <?php $likeId = 'like-' . $boardPinValue->id ?>
+                                <?php $unlikeId = 'unlike-' . $boardPinValue->id ?>
+                                <?php $like = $boardPinValue->user_id ?>
+                                <span id="like_action<?php echo $boardPinValue->id; ?>">
+                                    <?php if ($boardPinValue->user_id == $this->session->userdata('login_user_id')): ?>
+                                        <a href="<?php echo site_url('board/pinEdit/' . $boardPinValue->board_id . '/' . $boardPinValue->id) ?>" class="act_repin"><span>Edit</span></a>
+                                    <?php else: ?>
 
-                            <!-- If not login : like/repin/comment-->
-                            <?php if (!$this->session->userdata('login_user_id')): ?>
-                                <div class="action">
-                                    <span id="like_action">
-                                        <a class="act_like ajax" href="<?php echo site_url(); ?>board/pins/<?php echo $pinDetails->board_id; ?>/<?php echo $pinDetails->id; ?>/view"><span>Like</span></a>
-                                    </span>
-                                    <a class="fancyboxForm act_repin ajax" href="<?php echo site_url(); ?>board/pins/<?php echo $pinDetails->board_id; ?>/<?php echo $pinDetails->id; ?>/view">Repin</a>
-                                    <a class="act_comment ajax" href="<?php echo site_url(); ?>board/pins/<?php echo $pinDetails->board_id; ?>/<?php echo $pinDetails->id; ?>/view" ><span>Comment</span></a>
-                                </div>
-
-                            <?php else: ?>
-                                <!--If login : Display the like/comment/repin actions -->
-                                <div class="action">
-                                    <?php $likeId = 'like-' . $pinDetails->id ?>
-                                    <?php $unlikeId = 'unlike-' . $pinDetails->id ?>
-                                    <?php $like = $pinDetails->user_id ?>
-                                    <span id="like_action<?php echo $pinDetails->id; ?>">
-                                        <?php if ($pinDetails->user_id == $this->session->userdata('login_user_id')): ?>
-                                            <a href="<?php echo site_url('board/pinEdit/' . $pinDetails->board_id . '/' . $pinDetails->id) ?>" class="act_repin"><span>Edit</span></a>
+                                        <?php if (!isLiked($boardPinValue->id, $this->session->userdata('login_user_id'))): ?>
+                                            <a class="act_like" id="<?php echo $likeId ?>" href="javascript:;"  onClick="doAction(<?php echo $like; ?>,<?php echo $boardPinValue->id; ?>,'like')"><span>Like</span></a>
                                         <?php else: ?>
-
-                                            <?php if (!isLiked($pinDetails->id, $this->session->userdata('login_user_id'))): ?>
-                                                <a class="act_like" id="<?php echo $likeId ?>" href="javascript:;"  onClick="doAction(<?php echo $like; ?>,<?php echo $pinDetails->id; ?>,'like')"><span>Like</span></a>
-                                            <?php else: ?>
-                                                <a class="act_unlike" id="<?php echo $unlikeId ?>" href="javascript:;"   onClick="doAction(<?php echo $like; ?>,<?php echo $pinDetails->id; ?>,'unlike')"><span>UnLike</span></a>
-                                            <?php endif ?>
+                                            <a class="act_unlike" id="<?php echo $unlikeId ?>" href="javascript:;"   onClick="doAction(<?php echo $like; ?>,<?php echo $boardPinValue->id; ?>,'unlike')"><span>UnLike</span></a>
                                         <?php endif ?>
-                                    </span>
-                                    <div id="showLike<?php echo $pinDetails->id ?>" style="display: none;float:left;width: 64px;">
-                                        <?php $like = $pinDetails->user_id ?>
-                                        <a class="act_like" id="<?php echo $likeId ?>" href="javascript:;"  onClick="doAction(<?php echo $like; ?>,<?php echo $pinDetails->id; ?>,'like')"><span>Like</span></a>
-                                    </div>
-                                    <div id="showUnLike<?php echo $pinDetails->id ?>" style="display: none;float:left;width: 64px;">
-                                        <?php $like = $pinDetails->user_id ?>
-                                        <a class="act_unlike" id="<?php echo $unlikeId ?>" href="javascript:;"   onClick="doAction(<?php echo $like; ?>,<?php echo $pinDetails->id; ?>,'unlike')"><span>UnLike</span></a>
-                                    </div>
-
-                                    <a class="ajax" href="<?php echo site_url('repin/load/' . $pinDetails->id) ?>" >Repin</a>
-
-
-                                    <?php $commentId = 'comment-' . $pinDetails->id ?>
-                                    <?php $uncommentId = 'uncomment-' . $pinDetails->id ?>
-                                <!--                                <a class="act_comment" id="<?php //echo $commentId   ?>" href="javascript:;" onClick="addComment(<?php //echo $pinDetails->id;   ?>,'comment')" ><span>Comment</span></a>
-                                                                    <a class="act_uncomment" id="<?php //echo $uncommentId   ?>" href="javascript:;" onClick="addComment(<?php //echo $pinDetails->id;   ?>,'uncomment')" ><span>Uncomment</span></a>-->
-                                    <a class="act_comment" id="<?php echo $commentId ?>" href="javascript:void(0);" ><span>Comment</span></a>
-                                    <a class="act_uncomment" id="<?php echo $uncommentId ?>" href="javascript:void(0);" ><span>Uncomment</span></a>
+                                    <?php endif ?>
+                                </span>
+                                <div id="showLike<?php echo $boardPinValue->id ?>" style="display: none;float:left;width: 64px;">
+                                    <?php $like = $boardPinValue->user_id ?>
+                                    <a class="act_like" id="<?php echo $likeId ?>" href="javascript:;"  onClick="doAction(<?php echo $like; ?>,<?php echo $boardPinValue->id; ?>,'like')"><span>Like</span></a>
                                 </div>
-                            <?php endif; ?>
+                                <div id="showUnLike<?php echo $boardPinValue->id ?>" style="display: none;float:left;width: 64px;">
+                                    <?php $like = $boardPinValue->user_id ?>
+                                    <a class="act_unlike" id="<?php echo $unlikeId ?>" href="javascript:;"   onClick="doAction(<?php echo $like; ?>,<?php echo $boardPinValue->id; ?>,'unlike')"><span>UnLike</span></a>
+                                </div>
 
-                            <!--Display pin image -->
-                            <div class="pin_img">
-                                <?php if ($pinDetails->type == 'video'): ?>
-                                <div class="video" style="top:21%;left:5%;"><a href="<?php echo site_url(); ?>board/pins/<?php echo $pinDetails->board_id; ?>/<?php echo $pinDetails->id; ?>/view" class="PinImage ImgLink ajax">&nbsp;</a></div>
-                                <?php endif ?>
-                                <a href="<?php echo site_url(); ?>board/pins/<?php echo $pinDetails->board_id; ?>/<?php echo $pinDetails->id; ?>/view" class="PinImage ImgLink ajax">
-                                    <img src="<?php echo $pinDetails->pin_url; ?>" alt="<?php echo $pinDetails->description; ?>" class="PinImageImg" style="height: 120px;" />
+                                <a class="ajax" href="<?php echo site_url('repin/load/' . $boardPinValue->id) ?>" >Repin</a>
 
-                                </a>
+
+                                <?php $commentId = 'comment-' . $boardPinValue->id ?>
+                                <?php $uncommentId = 'uncomment-' . $boardPinValue->id ?>
+                                <a class="act_comment" id="<?php echo $commentId ?>" href="javascript:;" onClick="addComment(<?php echo $boardPinValue->id; ?>,'comment')" ><span>Comment</span></a>
+                                <a class="act_uncomment" id="<?php echo $uncommentId ?>" href="javascript:;" onClick="addComment(<?php echo $boardPinValue->id; ?>,'uncomment')" ><span>Uncomment</span></a>
                             </div>
+                        <?php endif; ?>
 
-                            <!--Display the likes/comments/repins count -->
-                            <div class="comm_des">
-                                <p class="des"><?php echo $pinDetails->description; ?></p>
-                                <p class="comm_like">
-                                    <?php $commentCountId = 'comment_count_' . $pinDetails->id; ?>
-                                    <?php $likeCountId = 'like1-' . $pinDetails->id; ?>
-                                    <span id="<?php echo $likeCountId; ?>"><?php echo getPinLikeCount($pinDetails->id); ?> Likes</span>
-                                    <span id="<?php echo $commentCountId; ?>"> <?php echo count($comments) ?> Comments</span>
-
-                                    <?php $repinCount = getRepinCount('from_pin_id', $pinDetails->id); ?>
-                                    <?php $repinCountId = 'repin_count_' . $pinDetails->id; ?>
-                                    <span id="<?php echo $repinCountId; ?>"><?php echo $repinCount; ?> Repins</span>
-                                </p>
-                            </div>
-
-                            <!--Display user name, board name, source name-->
-                            <div class="convo_blk attribution">
-                                <?php $userDetails = userDetails($pinDetails->user_id); ?>
-                                <a href="<?php echo site_url('user/index/' . $pinDetails->user_id) ?>" class="convo_img">
-                                    <img src="<?php echo $userDetails['image'] ?>" alt="user" />
-                                </a>
-                                <p>
-                                    <?php $source = GetDomain($pinDetails->source_url); ?>
-                                    <?php $boardDetails = getBoardDetails($pinDetails->board_id); ?>
-                                    <a href="<?php echo site_url('user/index/' . $pinDetails->user_id) ?>"><?php echo $userDetails['name'] ?></a>
-                                    <?php if ($pinDetails->source_url != ""): ?>
-                                        Via <a target="_blank" href="<?php echo $pinDetails->source_url; ?>"><?php echo $source; ?></a>
-                                    <?php endif; ?>
-                                    onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
-                                        <?php echo $boardDetails->board_name; ?></a>
-                                </p>
-                            </div>
-
-                            <!--comment-->
-                            <?php $commentBoxId = 'comments_box_' . $pinDetails->id; ?>
-                            <?php if (!empty($comments)): ?>
-                                <?php foreach ($comments as $key => $cmt): ?>
-                                    <?php $commentuser = userDetails($cmt->user_id) ?>
-                                    <div id="<?php echo $commentBoxId; ?>">
-                                        <!-- Comment List -->
-                                        <div class="convo_blk comments">
-                                            <a href="<?php echo site_url('user/index/' . $cmt->user_id) ?>" class="convo_img">
-                                                <img src="<?php echo $commentuser['image'] ?>" alt="user" />
-                                            </a>
-                                            <p>
-                                                <a href="<?php echo site_url('user/index/' . $cmt->user_id) ?>"><?php echo $commentuser['name'] ?></a> <?php echo $cmt->comments ?>
-                                            </p>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <div id="<?php echo $commentBoxId; ?>"></div>
+                        <div class="pin_img">
+                            <?php if ($boardPinValue->type == 'video'): ?>
+                                <div class="video" style="top:8%;left:7%;"><a href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view" class="ajax">&nbsp;</a></div>
                             <?php endif ?>
-                            <div class="convo_blk enter_comm" id="<?php echo $pinDetails->id; ?>"></div>
+                            <a href="<?php echo site_url(); ?>board/pins/<?php echo $boardDetails->id; ?>/<?php echo $boardPinValue->id; ?>/view" class="ajax">
+                                <img src="<?php echo $boardPinValue->pin_url; ?>" alt="<?php echo $boardPinValue->description; ?>" class="PinImageImg"  />
+                            </a>
                         </div>
-                    <?php } ?>
+                        <div class="comm_des">
+                            <p class="des"><?php echo $boardPinValue->description; ?></p>
+                            <p class="comm_like">
+                                <?php $commentCountId = 'comment_count_' . $boardPinValue->id; ?>
+                                <?php $likeCountId = 'like1-' . $boardPinValue->id; ?>
+                                <span id="<?php echo $likeCountId; ?>"><?php echo getPinLikeCount($boardPinValue->id); ?> Likes</span>
+                                <span id="<?php echo $commentCountId; ?>"> <?php echo count($comments) ?> Comments</span>
+
+                                <?php $repinCount = getRepinCount('from_pin_id', $boardPinValue->id); ?>
+                                <?php $repinCountId = 'repin_count_' . $boardPinValue->id; ?>
+                                <span id="<?php echo $repinCountId; ?>"><?php echo $repinCount; ?> Repins</span>
+                            </p>
+                        </div>
+
+                        <div class="convo_blk attribution">
+                            <?php $userDetails = userDetails($boardPinValue->user_id); ?>
+                            <a href="<?php echo site_url('user/index/' . $boardPinValue->user_id) ?>" class="convo_img">
+                                <img src="<?php echo $userDetails['image'] ?>" alt="cogzidel" />
+                            </a>
+                            <p>
+                                <?php $source = GetDomain($boardPinValue->source_url); ?>
+                                <?php $boardDetails = getBoardDetails($boardPinValue->board_id); ?>
+                                <a href="<?php echo site_url('user/index/' . $boardPinValue->user_id) ?>"><?php echo $userDetails['name'] ?></a>
+                                <?php if ($boardPinValue->source_url != ""): ?>
+                                    Via <a href="<?php echo $boardPinValue->source_url; ?>"><?php echo $source; ?></a>
+                                <?php endif; ?>
+                                onto <a   href="<?php echo site_url('board/index/' . $boardDetails->id) ?>">
+                                    <?php echo $boardDetails->board_name; ?></a>
+                            </p>
+
+
+                        </div>
+                        <!--comment-->
+                        <?php $commentBoxId = 'comments_box_' . $boardPinValue->id; ?>
+                        <?php if (!empty($comments)): ?>
+                            <?php foreach ($comments as $key => $cmt): ?>
+                                <?php $commentuser = userDetails($cmt->user_id) ?>
+                                <div id="<?php echo $commentBoxId; ?>">
+                                    <!-- Comment List -->
+                                    <div class="convo_blk comments">
+                                        <a href="<?php echo site_url('user/index/' . $cmt->user_id) ?>" class="convo_img">
+                                            <img src="<?php echo $commentuser['image'] ?>" alt="user" />
+                                        </a>
+                                        <p>
+                                            <a href="<?php echo site_url('user/index/' . $cmt->user_id) ?>"><?php echo $commentuser['name'] ?></a> <?php echo $cmt->comments ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div id="<?php echo $commentBoxId; ?>"></div>
+                        <?php endif ?>
+                        <div class="convo_blk enter_comm" id="<?php echo $boardPinValue->id; ?>"></div>
+                        <div class="clear"></div>
+
+                    </div>
+
+
+
                 <?php endforeach ?>
-            <?php else: ?>
-                <div class="alert_messgae">
-                    <h2>Sorry, no items to display</h2>
-                </div>
             <?php endif ?>
         </div> <!-- #alpha -->
-        <nav id="page-nav"><a href="http://products.cogzidel.com/pinterest-clone/con_home/scroll/2"></a></nav>
     </div>
+
 </div><!-- closing middlebanner -->
 <?php $this->load->view('footer'); ?>
 <script type="text/javascript">
@@ -377,6 +375,31 @@
                 // show elems now they're ready
                 $newElems.animate({ opacity: 1 });
                 $alpha.masonry( 'appended', $newElems, true );
+                $("a.act_uncomment").hide();
+                $(".enter_comm").hide();
+                //Examples of how to assign the ColorBox event to elements
+                $(".group1").colorbox({rel:'group1'});
+                $(".group2").colorbox({rel:'group2', transition:"fade"});
+                $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+                $(".group4").colorbox({rel:'group4', slideshow:true});
+                $(".ajax").colorbox({scrolling:false,transition:"elastic"});
+                $(".youtube").colorbox({iframe:true, innerWidth:425, innerHeight:344});
+                $(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+                $(".inline").colorbox({inline:true, width:"50%"});
+                $(".callbacks").colorbox({
+                    onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+                    onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+                    onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+                    onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+                    onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+                });
+
+                //Example of preserving a JavaScript event for inline calls.
+                $("#click").click(function(){
+                    $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+                    return false;
+                });
+
             });
         }
     );
@@ -384,10 +407,21 @@
     });
 
 </script>
+<div class="scroll_top" style="display: none;">
+    <a href="#top">Back to Top</a>
+</div>
+<script type="text/javascript">
 
-<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>-->
-<!--fixed sidebar-->
-
-<!--End fixed sidebar-->
-</body>
-</html>
+    $(function() {
+        $(window).scroll(function() {
+            if($(this).scrollTop() != 0) {
+                $('.scroll_top').fadeIn();
+            } else {
+                $('.scroll_top').fadeOut();
+            }
+        });
+    });
+</script>
+<nav id="page-nav">
+    <a href="<?php echo site_url(); ?>welcome/mostRepinned/20"></a>
+</nav>
