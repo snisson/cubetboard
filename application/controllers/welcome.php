@@ -146,10 +146,26 @@ class Welcome extends CI_Controller {
      * @author  : Vishal
      * @since   : 01-03-2012
      * @return
+     * @modified by Rahul
      */
 
     function mostLiked() {
+        $this->load->model('action_model');
         $data['title'] = 'Most liked';
+        $userID = false;
+        $order = false;
+        $limit = 20;
+
+        $offset = $this->uri->segment(3, 0);
+        /* Script works only if limit is 20 */
+        if ($this->uri->segment(3, 0)) {
+            $nextOffset = (($offset - $limit) + $offset);
+        } else {
+            $nextOffset = 0;
+        }
+
+        $result = $this->action_model->get_most_liked($limit, $nextOffset);
+        $data['pins'] = $result;
         $this->load->view('mostliked_view', $data);
     }
 

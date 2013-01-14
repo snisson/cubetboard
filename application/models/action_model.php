@@ -545,5 +545,32 @@ class Action_model extends CI_Model {
             return false;
         }
     }
+    
+    /**
+     * Function to get most liked pins
+     * @param type $limit
+     * @param type $nextOffset
+     * @author Rahul K Murali
+     */
+    function get_most_liked($limit, $nextOffset) {
+
+        $sql = 'SELECT
+                        `a`.*, COUNT(`b`.`pin_id`) AS count 
+            
+                  FROM (`likes` as b)
+                  
+                  JOIN `pins` as a ON `a`.`id` = `b`.`pin_id` 
+                  
+                  GROUP BY `b`.`pin_id`
+                  
+                  ORDER BY `count` desc LIMIT '.$nextOffset.','.$limit;
+        $query = $this->db->query($sql);
+        if ($query->num_rows > 0) {
+            $result = $query->result();
+            return $result;
+        } else {
+            return false;
+        }
+    }
 
 }
