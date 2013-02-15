@@ -52,14 +52,15 @@ function pinLike(val)
 /*COMMENT A PIN*/
 /*ACTIVITY VIEW PAGE,ALL PIN VIEW PAGE,BOARD VIEW PAGE*/
 function addComment(val)
-{
+{   
     var comment   = $("textarea#"+val+'_comment').val();
     dataString = 'id='+val+'&comment='+comment;
     //alert(dataString);
-    if((comment=='')||(comment=='Add a comment...'))
+    if((comment=='')||(comment=='Add a comment...') || $("textarea#"+val+'_comment').length == 0)
     {
             return false;
     }
+    else{
     $.ajax({
             url: baseUrl+'board/addComment',
             type: "POST",
@@ -75,6 +76,7 @@ function addComment(val)
             //alert(substr[0]);
         }
         });
+    }
 }
 
 /*CLEAR A COMMENT*/

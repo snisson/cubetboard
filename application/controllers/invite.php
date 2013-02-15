@@ -467,10 +467,7 @@ class Invite extends CI_Controller {
     function _emailAlert($insert,$pass=false)
     {
         $this->load->library('email');
-        $config['mailtype']     = 'html';
-        $config['wordwrap']     = true;
-        $this->email->initialize($config);
-        $this->email->from('info@pinterestclone', 'Pinterest');
+        $this->email->from($this->config->item('register_from_email'), $this->config->item('register_from_name'));
 
         $message                        = "Dear ".$insert['first_name'].' '.$insert['last_name'].'<br/>';
         $message                        .= "Thankyou for registering with us.".'<br/>';
@@ -499,9 +496,10 @@ class Invite extends CI_Controller {
 
 
         $this->email->to($insert['email']);
-        $this->email->subject('Thankyou for registering with us');
+        $this->email->subject($this->config->item('register_email_subject'));
         $this->email->message($message);
-        $this->email->send();
+        if(!$this->email->send())
+        log_message('debug', $this->email->print_debugger());
 
     }
     /**

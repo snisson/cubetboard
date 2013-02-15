@@ -26,6 +26,11 @@
                                 <textarea name="description" id="description" style="width:255px;height:54px;float: left;"value=""></textarea>
                                  <span id="error_description" class="validation-message"></span>
                             </li>
+                             <li>
+                                <label>Link</label>
+                                <input type="text" name="link" id="link" value="" class="" style="float:left"/>
+                                <span id="error_link" class="validation-message"></span>
+                            </li>
 
                             <li>
                                 <label>Board</label>

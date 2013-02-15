@@ -674,6 +674,33 @@ class Board_model extends CI_Model {
         }
     }
     /**
+     * Function to get the count of pins 
+     * @since 14-02-2013
+     * @author Aneesh T
+     * @param <String> $field
+     * @param <String> $value
+     * @return Int
+     */
+    
+    function getPinCountByField($field,$value)
+    {
+         $sql        = "SELECT
+                            count(id) as count
+                        FROM
+                            pins
+                        WHERE
+                            $field = '$value'";
+        $query      = $this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+            $row    = $query->row();
+            return $row->count;
+        }
+        else{
+            return 0;
+        }
+    }
+    /**
      * Function test. Not in use
 
      */

@@ -133,8 +133,18 @@ class Pins extends CI_Controller {
      {
          $pinId             = $this->input->post('pinId');
          $boardId           = $this->input->post('boardId');
+         
+         $pin=$this->board_model->getPinDetails($pinId,$boardId);
+         
+         if($this->board_model->getPinCountByField('pin_url',$pin->pin_url)==1){
+         $explode = explode("/", $pin->pin_url);
+         $count=count($explode);
+         if (file_exists(getcwd()."/application/assets/pins/" . $explode[$count-2] . "/" . $explode[$count-1]))
+         unlink(getcwd()."/application/assets/pins/" . $explode[$count-2] . "/" . $explode[$count-1]);
+         }
          $this->board_model->deletePin($pinId,$boardId);
          echo json_encode(true);
+        
      }
      function uploadPins()
      {  $data['title'] = 'upload a pin';
@@ -153,6 +163,7 @@ class Pins extends CI_Controller {
          $insert['user_id']         =  $user_id = $this->session->userdata('login_user_id');
          $insert['board_id']        = $boardId = $this->input->post('board_id');
          $insert['type']            = $this->input->post('type');
+         $insert['source_url']      = $this->input->post('link'); 
 
          
          if($_FILES["pin"]["name"]!='')
@@ -168,6 +179,7 @@ class Pins extends CI_Controller {
                     $image          = $_FILES["pin"]["name"];
                     $ext            = explode('/', $_FILES["pin"]["type"]);
                     $image          = time().'_'.$image;
+                    $image = str_replace(' ', '_', $image); 
                     $dir = getcwd()."/application/assets/pins/$user_id";
                     if(file_exists($dir) && is_dir($dir))
                     {
@@ -183,7 +195,7 @@ class Pins extends CI_Controller {
 
                 }
                 $insert['pin_url']      = $image;
-                $insert['source_url']      = '';
+                //$insert['source_url']      = '';
                 $id= $this->board_model->saveUploadPin($insert);
                 if($id)
                 {

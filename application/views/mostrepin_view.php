@@ -423,5 +423,5 @@
     });
 </script>
 <nav id="page-nav">
-    <a href="<?php echo site_url(); ?>welcome/mostRepinned/20"></a>
+    <a href="<?php echo site_url(); ?>welcome/mostRepinned/<?php echo $page; ?>"></a>
 </nav>

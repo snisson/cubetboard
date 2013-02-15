@@ -73,16 +73,21 @@ class Welcome extends CI_Controller {
         $order = false;
         //$config['base_url'] = site_url().'test/getAllpins';
         //$config['uri_segment']          = $this->uri->segment(3,2);
-        $limit = 20;
+       
 
-        $offset = $this->uri->segment(3, 0);
+        //$offset = $this->uri->segment(3, 0);
+        $limit = $this->config->item('pin_load_limit');
+        $page = $this->uri->segment(3, 1);
+        
+        $nextOffset = ($page -1) * $limit;
+        $nextPage = $page +1;
         /* Script works only if limit is 20 */
-        if ($this->uri->segment(3, 0)) {
-            $nextOffset = (($offset - $limit) + $offset);
-        } else {
-            $nextOffset = 0;
-        }
-
+//        if ($this->uri->segment(3, 0)) {
+//            $nextOffset = (($offset - $limit) + $offset);
+//        } else {
+//            $nextOffset = 0;
+//        }
+        
         //$config['total_rows'] = $count;
         //$config['per_page'] = $limit = 20;
         //$this->pagination->initialize($config);
@@ -127,6 +132,7 @@ class Welcome extends CI_Controller {
             else
                 $data['row'] = false;
             $data['offset'] = $nextOffset;
+            $data['page'] = $nextPage;
             $this->load->view('welcome', $data);
         }
         //if invalid entry in db , call logout function by passing a paramter to set the invalid login message
@@ -136,6 +142,7 @@ class Welcome extends CI_Controller {
                 $this->session->unset_userdata('noentry_message');
             }
             $data['offset'] = $nextOffset;
+            $data['page'] = $nextPage;
             $this->load->view('welcome', $data);
         }
     }
@@ -154,18 +161,24 @@ class Welcome extends CI_Controller {
         $data['title'] = 'Most liked';
         $userID = false;
         $order = false;
-        $limit = 20;
+        
+        $limit = $this->config->item('pin_load_limit');
+        $page = $this->uri->segment(3, 1);
+        
+        $nextOffset = ($page -1) * $limit;
+        $nextPage = $page +1;
 
-        $offset = $this->uri->segment(3, 0);
-        /* Script works only if limit is 20 */
-        if ($this->uri->segment(3, 0)) {
-            $nextOffset = (($offset - $limit) + $offset);
-        } else {
-            $nextOffset = 0;
-        }
+//        $offset = $this->uri->segment(3, 0);
+//        /* Script works only if limit is 20 */
+//        if ($this->uri->segment(3, 0)) {
+//            $nextOffset = (($offset - $limit) + $offset);
+//        } else {
+//            $nextOffset = 0;
+//        }
 
         $result = $this->action_model->get_most_liked($limit, $nextOffset);
         $data['pins'] = $result;
+        $data['page'] = $nextPage;
         $this->load->view('mostliked_view', $data);
     }
 
@@ -182,18 +195,24 @@ class Welcome extends CI_Controller {
         $data['title'] = 'Most Repinned';
         $userID = false;
         $order = false;
-        $limit = 20;
+        
+        $limit = $this->config->item('pin_load_limit');
+        $page = $this->uri->segment(3, 1);
+        
+        $nextOffset = ($page -1) * $limit;
+        $nextPage = $page +1;
 
-        $offset = $this->uri->segment(3, 0);
-        /* Script works only if limit is 20 */
-        if ($this->uri->segment(3, 0)) {
-            $nextOffset = (($offset - $limit) + $offset);
-        } else {
-            $nextOffset = 0;
-        }
+//        $offset = $this->uri->segment(3, 0);
+//        /* Script works only if limit is 20 */
+//        if ($this->uri->segment(3, 0)) {
+//            $nextOffset = (($offset - $limit) + $offset);
+//        } else {
+//            $nextOffset = 0;
+//        }
 
         $result = $this->action_model->get_most_repinned($limit, $nextOffset);
         $data['pins'] = $result;
+        $data['page'] = $nextPage;
         $this->load->view('mostrepin_view', $data);
     }
 

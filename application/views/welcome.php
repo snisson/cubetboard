@@ -260,7 +260,7 @@
 
                                 <?php $commentId = 'comment-' . $boardPinValue->id ?>
                                 <?php $uncommentId = 'uncomment-' . $boardPinValue->id ?>
-                                <a class="act_comment" id="<?php echo $commentId ?>" href="javascript:;" onClick="addComment(<?php echo $boardPinValue->id; ?>,'comment')" ><span>Comment</span></a>
+                                <a class="act_comment" id="<?php echo $commentId ?>" href="javascript:;" onClick="addComment(<?php echo $boardPinValue->id; ?>,'comment')"><span>Comment</span></a>
                                 <a class="act_uncomment" id="<?php echo $uncommentId ?>" href="javascript:;" onClick="addComment(<?php echo $boardPinValue->id; ?>,'uncomment')" ><span>Uncomment</span></a>
                             </div>
                         <?php endif; ?>
@@ -423,5 +423,5 @@
     });
 </script>
 <nav id="page-nav">
-    <a href="<?php echo site_url(); ?>welcome/index/<?php echo $offset; ?>"></a>
+    <a href="<?php echo site_url(); ?>welcome/index/<?php echo $page; ?>"></a>
 </nav>

@@ -101,17 +101,18 @@ class Login extends CI_Controller {
             $this->session->set_userdata('redirect_url',$redirect);
           
         }
-        $this->load->model('Facebook_model');
-        $fb_data       = $this->session->userdata('fb_data');
         
-        $this->tweet->logout();
-        if((($fb_data['uid']) && ($fb_data['me']) &&  ($fb_data['uid']!=0)&&($fb_data['uid']!='')))
-        {
-            redirect($fb_data['logoutUrl']);
-        }
-        else{
+//        $this->load->model('Facebook_model');
+//        $fb_data       = $this->session->userdata('fb_data');
+//        $this->tweet->logout();
+//        if((($fb_data['uid']) && ($fb_data['me']) &&  ($fb_data['uid']!=0)&&($fb_data['uid']!='')))
+//        {
+//            //redirect($fb_data['logoutUrl']);
+//            redirect();
+//        }
+//        else{
             redirect('login/index');
-        }
+//        }
         
     }
     /**

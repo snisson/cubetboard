@@ -381,6 +381,10 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+/* The number of pins the page should load while scrolling */
+
+$config['pin_load_limit'] = 20;
+
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

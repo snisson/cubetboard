@@ -14,8 +14,7 @@
 | path to your installation.
 |
 */
-//$config['base_url']	= 'http://staging.cubettech.com/ci/pinterest';
-$config['base_url']	= 'http://localhost/dev001/projects/cubetboard';
+$config['base_url']	= 'http://board.cubettech.com/demo/';
 
 /*
 |--------------------------------------------------------------------------
@@ -380,6 +379,10 @@ $config['rewrite_short_tags'] = FALSE;
 |
 */
 $config['proxy_ips'] = '';
+
+/* The number of pins the page should load while scrolling */
+
+$config['pin_load_limit'] = 20;
 
 
 /* End of file config.php */

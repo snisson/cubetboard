@@ -80,7 +80,7 @@ $autoload['helper'] = array('url','pinterest_helper');
 |
 */
 
-$autoload['config'] = array('config');
+$autoload['config'] = array('config','email');
 
 
 /*
