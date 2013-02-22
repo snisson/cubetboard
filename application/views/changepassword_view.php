@@ -50,7 +50,7 @@
             <li>
                 <label for="id_old_password">Old</label>
                  <div class="Right">
-                    <input type="password" name="old_password" id="id_old_password" value=" "/>
+                    <input type="password" name="old_password" id="id_old_password" value=""/>
                     <span class="validation-message" id="old_null_error"></span>
                     <span class="validation-message" id="old_error"><?php echo $olderror;?></span>
                  </div>

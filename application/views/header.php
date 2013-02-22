@@ -79,6 +79,10 @@
      <!--facebox  -->
     <link href="<?php echo base_url(); ?>application/src/facebox.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>application/assets/css/example.css" media="screen" rel="stylesheet" type="text/css" />
+    <!-- pin url -->
+   <!-- <script type="text/javascript" src="<?php echo base_url(); ?>application/scripts/jquery.livequery.js"></script> -->
+    <script type="text/javascript" src="<?php echo base_url(); ?>application/scripts/pin_url.js"></script>
+
 </head>
 
         
@@ -156,6 +160,7 @@
                                 <a class="nav-add" href="#">Add</a>
                                 <ul>
                                     <li><a href="<?php echo site_url('board/add')?>" class="ajax" >New board</a></li>
+                                    <li><a href="<?php echo site_url('pins/addPins')?>" class="ajax" >Add a pin</a></li>
                                     <li class="beforeDivider"><a href="<?php echo site_url('pins/uploadPins')?>" class="ajax" >Upload a pin</a></li>
                                 </ul>
                             </li>

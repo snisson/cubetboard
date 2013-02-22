@@ -649,7 +649,7 @@
         var getComment=$('#comment_'+pinid).val();
         $('#'+pinid).hide();
         $('a#uncomment-individual-'+pinid).hide();
-        $('a#comment-individual-'+pinid).show();
+       
 
         val = 'id='+pinid+'&comment='+getComment;
         $.ajax({
@@ -676,6 +676,7 @@
                     $("div[id=comments_box_"+pinid+"]:last").append("<div class='convo_blk comments width_class individual' id='comment_id_"+data[1]+"'><a class='convo_img individual' href='#'><img src="+logImage+" height='50px' width='50px'/></a><a href="+baseUrl+"'user/index/'"+logId+"><strong>"+commentinfo[0]+" </strong></a>"+commentinfo[1]+"<a style='cursor: pointer;float:right;margin-right:5px;'  onclick='deleteComment("+data[1]+")' title='Remove Comment' class='DeleteComment floatRight tipsyHover'>X</a></div> ");
                     colorboxResize();
             }
+             $('a#comment-individual-'+pinid).show();
             }
         })
 

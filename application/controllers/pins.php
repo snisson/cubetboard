@@ -151,6 +151,18 @@ class Pins extends CI_Controller {
          $this->load->view('upload_pin_view',$data);
      }
      /**
+     * For add pin view
+     * @param  :
+     * @author : Aneesh T
+     * @since  : 19-02-2013
+     * @return :
+     */
+     function addPins()
+     {  
+        $data['title'] = 'add a pin';
+        $this->load->view('add_pin_view',$data);
+     }
+     /**
      * Function save the new uploaded an pin
      * @param  :
      * @author : Vishal
@@ -208,6 +220,193 @@ class Pins extends CI_Controller {
                  redirect('board/index/'.$boardId);
               }
         }
+     }
+     /**
+     * Function save the new add pin
+     * @param  :
+     * @author : Aneesh T
+     * @since  : 19-02-2013
+     * @return :
+     */
+     function saveAddPin()
+     {
+         $insert['description']     = $this->input->post('description');
+         $insert['user_id']         =  $user_id = $this->session->userdata('login_user_id');
+         $insert['board_id']        = $boardId = $this->input->post('board_id');
+         $insert['type']            = 'image';
+         $insert['source_url']      = $this->input->post('link');
+         $remoteUrl      = $this->input->post('current_img_src'); 
+         
+         
+         if($remoteUrl)
+         {      $dir = getcwd()."/application/assets/pins/$user_id";
+                if(!file_exists($dir) || !is_dir($dir))
+                {
+                 mkdir(getcwd()."/application/assets/pins/$user_id",0777);
+                }
+                    
+                $url_arr = explode ('/', $remoteUrl);
+                $ct = count($url_arr);
+                $image = str_replace(' ', '_', time().'_'.$url_arr[$ct-1]);
+
+                file_put_contents(getcwd()."/application/assets/pins/$user_id/" . $image, file_get_contents( $remoteUrl));
+
+                $insert['pin_url'] = site_url("/application/assets/pins/$user_id/".$image);
+                $id= $this->board_model->saveUploadPin($insert);
+                if($id)
+                {
+                   redirect('board/pins/'.$boardId.'/'.$id);
+                }    
+        }
+     }
+     private function InternetCombineUrl($absolute, $relative) {
+        $p = parse_url($relative);
+        if($p["scheme"])return $relative;
+        
+        extract(parse_url($absolute));
+        
+        $path = dirname($path); 
+    
+        if($relative{0} == '/') {
+            $cparts = array_filter(explode("/", $relative));
+        }
+        else {
+            $aparts = array_filter(explode("/", $path));
+            $rparts = array_filter(explode("/", $relative));
+            $cparts = array_merge($aparts, $rparts);
+            foreach($cparts as $i => $part) {
+                if($part == '.') {
+                    $cparts[$i] = null;
+                }
+                if($part == '..') {
+                    $cparts[$i - 1] = null;
+                    $cparts[$i] = null;
+                }
+            }
+            $cparts = array_filter($cparts);
+        }
+        $path = implode("/", $cparts);
+        $url = "";
+        if($scheme) {
+            $url = "$scheme://";
+        }
+        if($user) {
+            $url .= "$user";
+            if($pass) {
+                $url .= ":$pass";
+            }
+            $url .= "@";
+        }
+        if($host) {
+            $url .= "$host/";
+        }
+        $url .= $path;
+        return $url;
+    }
+    
+    
+
+     function pinsFromUrl(){
+        $body_elemnt=array('h1','h2','h3','h4','h5','h6','p','div','ul','span','center','table','ol','li','body');  
+        set_time_limit(0); // Do not let the script time out
+
+        include (getcwd().'/application/controllers/simplehtmldom/simple_html_dom.php'); // include  the parser library
+
+
+        $url = $_GET['url']; 
+        //URL received via ajax
+        $html = @file_get_html($url); 
+        // get DOM from URL fetched by ajax
+       
+        
+        foreach ($html->find('base') as $e);
+        $baseUrl = $e->href;
+
+
+        //Fetch images url and add it to an array
+        $images_url = array();
+        foreach ($html->find('img') as $e) { 
+            //$imgSrc = $e->src;
+            if($baseUrl){
+              $imgSrc = $baseUrl .  $e->src; 
+            }
+            else{
+            $imgSrc= self::InternetCombineUrl($url,$e->src);
+            }
+            // Loop through all images and make sure only appropriate image size is fetched
+            // This will neglect icons , images from webpage layout etc
+            if (substr($imgSrc, 0, 7) == 'http://' || substr($imgSrc, 0, 8) == 'https://') { // Make sure image url starts by either http or https
+                
+               
+               $ImgSize = @getimagesize($imgSrc);
+                // Get the size of current image
+               if($ImgSize){
+                if ($ImgSize[0] >= 100 && $ImgSize[1] >= 100) {
+
+                    $images_url[] = $imgSrc;
+                    // Add image to array stack
+                }
+               }
+              
+            }
+        }
+        if (!empty($images_url)) {
+
+            foreach ($html->find('meta[name=description]') as $e)
+                ; // Fetch Description from meta description of page
+            $description = $e->content;
+            //Fetch  Description from body of page
+            if (empty($description)) {
+                foreach ($body_elemnt as $elm) {
+                    $description = trim($html->find($elm, 0)->plaintext);
+                    if (strlen($description) > 50) {
+                        break;
+                    }
+                }
+            }
+        }
+       
+
+        //Some tidy up :)
+        $html->clear();
+        unset($html);
+
+        if (!empty($images_url)) {
+            
+            if (count($images_url) > 1) {
+            // If there's more than 1 image fetched , display the next and previous button
+            $div =  '<div><img src="'.base_url().'application/assets/images/prev.png" id="prev" alt=""/><img src="'.base_url().'application/assets/images/next.png" id="next" alt=""/></div>';
+            $div .=  '<div id="totalimg">1 of ' . count($images_url) . '</div>';
+            // display total no. of images retrieved
+            }
+            
+            
+        
+            // If image array contains images
+            $div .= '<div class="images">';
+            for ($i = 0; $i < count($images_url); $i++) {
+                // Loop through each image and add appropriate image tag
+                $y = $i + 1;
+
+               $div .=  '<img style="display: none;" src="' . $images_url[$i] . '" id="' . $y .
+                    '" width="150"/>';
+
+            }
+            $div .=  '<input name="total_images" id="total_images" value="' . count($images_url) .'" type="hidden"/>';
+            //Add the total no. of images to this hidden input.It will be used later when user press next/previous button
+            $div .=  '</div>';
+            
+            
+            
+        }
+
+       
+       
+
+
+        $jArray = array('description'=>$description,'content'=>$div);
+        echo json_encode($jArray);
+
      }
 }
 /* End of file pins.php */
