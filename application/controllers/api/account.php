@@ -31,10 +31,10 @@ class Account extends REST_Controller    {
      * @since 29-05-2013
      * @author Robin <robin@cubettech.com>
      */
-    function login_get()
+    function login_post()
     {
-        $key = $this->get('key');
-        $token = $this->get('token');
+        $key = $this->post('key');
+        $token = $this->post('token');
 
         $is_authenticated = $this->authapi->authenticate($key, $token);
 
@@ -44,8 +44,8 @@ class Account extends REST_Controller    {
             $this->response(array('error' =>  'Authentication Failed'), 401);
         }
         
-        $username  = $this->get('username');
-        $password  = md5($this->get('password'));
+        $username  = $this->post('username');
+        $password  = md5($this->post('password'));
         $login     = $this->apiaccount_model->authenticate($username ,$password);
 
         if($login)

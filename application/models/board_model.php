@@ -214,13 +214,15 @@ class Board_model extends CI_Model {
                 WHERE
                     id = $boardId";
         $this->db->query($sql);
+        
         /*Delete from other tables also*/
         $this->db->where('is_following_board_id', $boardId);
         $this->db->delete('follow');
 
         $this->db->where('board_id', $boardId);
-       $this->db->delete('report_pins');
-
+        $this->db->delete('report_pins');
+        
+        return true;
         
         
     }
@@ -263,6 +265,7 @@ class Board_model extends CI_Model {
                 WHERE
                     id = $commentId";
         $this->db->query($sql);
+        return true;
     }
     /**
      * Function save the details for a reported pin
@@ -357,8 +360,8 @@ class Board_model extends CI_Model {
         $this->db->where('id', $pinId);
         $this->db->delete('pins');
 
-       $this->db->where('pin_id', $pinId);
-       $this->db->delete('report_pins');
+        $this->db->where('pin_id', $pinId);
+        $this->db->delete('report_pins');
         
         $sql = "DELETE
                     FROM
@@ -368,8 +371,10 @@ class Board_model extends CI_Model {
                     AND
                         board_id = $boardId";
         $this->db->query($sql);
+        
+        return true;
 
-
+        
 
     }
     /**

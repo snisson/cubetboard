@@ -79,7 +79,7 @@ class Apiaction_model extends CI_Model {
             $this->db->order_by('time', 'DESC');
         }
 
-        $query = $this->db->get('pins');
+        $query = $this->db->get('pins', $limit, $offset);
 
 
         if ($query->num_rows() > 0) {
