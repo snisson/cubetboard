@@ -62,12 +62,7 @@ class Account extends REST_Controller    {
         }  
     }
     
-    /**
-     * Register function
-     * @since 29-05-2013
-     * @author Robin <robin@cubettech.com>
-     */
-    public function register_get(){
+    public function user_get(){
         $key = $this->get('key');
         $token = $this->get('token');
 
@@ -79,14 +74,36 @@ class Account extends REST_Controller    {
             $this->response(array('error' =>  'Authentication Failed'), 401);
         }
         
-        $username = $this->get('username');
-        $firstname = $this->get('first_name');
-        $middle_name = $this->get('middle_name');
-        $last_name = $this->get('last_name');
-        $location = $this->get('location');
-        $email = $this->get('email');
-        $password = md5($this->get('password'));
-        $connect_by = $this->get('connect_by');
+        $user_id  = $this->get('user_id');
+        
+        $userDetails = $this->apiaccount_model->userDetails($user_id);
+        $this->response($userDetails, 200);
+    }
+    /**
+     * Register function
+     * @since 29-05-2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function register_post(){
+        $key = $this->post('key');
+        $token = $this->post('token');
+
+        $is_authenticated = $this->authapi->authenticate($key, $token);
+
+        //Check if user is authenticated, if not, return error response
+        if($is_authenticated == 0) 
+        {
+            $this->response(array('error' =>  'Authentication Failed'), 401);
+        }
+        
+        $username = $this->post('username');
+        $firstname = $this->post('first_name');
+        $middle_name = $this->post('middle_name');
+        $last_name = $this->post('last_name');
+        $location = $this->post('location');
+        $email = $this->post('email');
+        $password = md5($this->post('password'));
+        $connect_by = $this->post('connect_by');
         
         $data = array(  'username' => $username,
                         'first_name' => $firstname,
@@ -166,7 +183,7 @@ class Account extends REST_Controller    {
     }
     
     /**
-     * user update function
+     * change user password function
      * @since 30-05-2013
      * @author Robin <robin@cubettech.com>
      */
