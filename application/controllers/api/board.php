@@ -24,7 +24,7 @@ class Board extends REST_Controller    {
         $this->load->model('board_model');
         $this->load->model('api/apiaction_model');
         $this->load->model('api/apiaccount_model');
-        define('XML_HEADER', 'board');
+        define('XML_HEADER', 'boards');
     }
     
     /**
@@ -50,7 +50,7 @@ class Board extends REST_Controller    {
         $filter = $this->get('filter');
         $user_id = $this->get('user_id') ? $this->get('user_id') : false;
         $board_id = $this->get('board_id') ? $this->get('board_id') : false;
-        $limit = $this->get('limit') ? $this->get('limit') : 20;
+        $limit = $this->get('limit') ? $this->get('limit') : 15;
         $offset = $this->get('offset') ? $this->get('offset') : 0;
 
         if(! $filter || $filter == 'all') {
@@ -114,7 +114,7 @@ class Board extends REST_Controller    {
         $category = $this->get('category');
         
         if(!$user_id || !$board_name || !$category) {
-           $this->response(array('error' =>  'Give me some inputs !'), 401); 
+           $this->response(array('error' =>  'Give me some inputs !'), 200); 
         }
         
         $board = array( 'board_name' => $board_name,
@@ -132,8 +132,42 @@ class Board extends REST_Controller    {
         }
     }
     
+     /**
+     * Get all boards of auser
+     * @since 06 June 2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function getUserBoards_get(){
+        $key = $this->get('key');
+        $token = $this->get('token');
+        
+        $is_authenticated = $this->authapi->authenticate($key, $token);
+            
+        //Check if user is authenticated, if not, return error response
+        if($is_authenticated == 0) 
+        {
+            $this->response(array('error' =>  'Authentication Failed'), 401);
+        }
+        
+        $user_id = $this->get('user_id');
+        
+        if(!$user_id) {
+           $this->response(array('error' =>  'Give me some inputs !'), 200); 
+        }
+        
+        define('XML_KEY', 'board');
+        if($results = $this->apiaction_model->getUserBoards($user_id)) {
+            foreach ($results as $key => $result) {
+                $results[$key]['pins'] = $this->board_model->getEachBoardPins($result['id'], 4);
+            }
+            $this->response($results, 200);
+        } else {
+            $this->response(array('error' => 'Something wrong!'), 200);
+        }
+    }
+    
     /**
-     * Create New board
+     * Get a board by id
      * @since 31 May 2013
      * @author Robin <robin@cubettech.com>
      */
@@ -162,6 +196,35 @@ class Board extends REST_Controller    {
         }
     }
     
+     /**
+     * Get pins on a board
+     * @since 06 June 2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function getPinsOnBoard_get(){
+        $key = $this->get('key');
+        $token = $this->get('token');
+        
+        $is_authenticated = $this->authapi->authenticate($key, $token);
+            
+        //Check if user is authenticated, if not, return error response
+        if($is_authenticated == 0) 
+        {
+            $this->response(array('error' =>  'Authentication Failed'), 401);
+        }
+        
+        $board_id = $this->get('board_id');
+        
+        if(!$board_id) {
+           $this->response(array('error' =>  'Give me some inputs !'), 401); 
+        }
+        
+        if($result = $this->board_model->getEachBoardPins($board_id)) {
+            $this->response($result, 200);
+        } else {
+            $this->response(array('error' => 'Something wrong!'), 200);
+        }
+    }
     
      /**
      * Delete board

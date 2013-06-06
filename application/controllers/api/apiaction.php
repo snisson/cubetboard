@@ -109,11 +109,11 @@ class Apiaction extends REST_Controller    {
      * @since 31-05-2013
      * @author Robin <robin@cubettech.com>
      */
-    function uploadPin_get()
+    function uploadPin_post()
     {
          
-        $key = $this->get('key');
-        $token = $this->get('token');
+        $key = $this->post('key');
+        $token = $this->post('token');
 
         $is_authenticated = $this->authapi->authenticate($key, $token);
 
@@ -124,13 +124,13 @@ class Apiaction extends REST_Controller    {
         }
         
          
-        $image_data = $this->get('image_data');
-        $insert['description']     = $this->get('description') ? : '';
-        $insert['user_id']         = $user_id = $this->get('user_id');
-        $insert['board_id']        = $boardId = $this->get('board_id');
-        $insert['type']            = $this->get('type') ? : 'image';
-        $insert['source_url']      = $this->get('link') ? : ''; 
-        $insert['gift']            = $this->get('gift') ? : ''; 
+        $image_data = $this->post('image_data');
+        $insert['description']     = $this->post('description') ? : '';
+        $insert['user_id']         = $user_id = $this->post('user_id');
+        $insert['board_id']        = $boardId = $this->post('board_id');
+        $insert['type']            = $this->post('type') ? : 'image';
+        $insert['source_url']      = $this->post('link') ? : ''; 
+        $insert['gift']            = $this->post('gift') ? : ''; 
 
         
         if($image_data) { 
@@ -163,7 +163,7 @@ class Apiaction extends REST_Controller    {
             }
             
         } else {
-             $this->response(array('error' =>  'Give me the input!'), 200);
+             $this->response(array('error' =>  'Give me the inputs!'), 200);
         }
 
      }

@@ -42,6 +42,57 @@ class Apiaccount_model extends CI_Model {
     }
     
     /**
+     * get user details function
+     * @param varchar $user_id User id
+     * @return array user data
+     * @since 05-06-2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function userDetails($user_id){
+        $this->db->select('id,first_name, middle_name, last_name, facebook_id, twitter_id, email, status,
+                            verification, description, location, image, connect_by, time_created, time_updated,
+                            notifications, twitter_post, facebook_post'
+        );
+        $this->db->where('id', $user_id);
+        $query = $this->db->get_where('user', $where);
+        
+        if($query->num_rows() != 0) {
+            return $query->row_array();
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Check if email address already exists
+     * @param varchar $email
+     * @return int
+     * @since 06-06-2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function check_email($email){
+        $this->db->where('email', $email);
+        $query = $this->db->get('user');
+        
+        return $query->num_rows();
+        
+    }
+    
+    /**
+     * Check if username already exists
+     * @param varchar $user_id
+     * @return int
+     * @since 06-06-2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function check_username($user_id){
+        $this->db->where('username', $user_id);
+        $query = $this->db->get('user');
+        
+        return $query->num_rows();
+    }
+    
+    /**
      * User registration
      * @param array $data User data
      * @return boolean

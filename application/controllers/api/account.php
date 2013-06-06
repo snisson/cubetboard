@@ -22,6 +22,7 @@ class Account extends REST_Controller    {
         $this->load->helper('url');
         $this->load->helper('pinterest_helper');
         $this->load->model('api/apiaccount_model');
+        $this->load->model('action_model');
         define('XML_HEADER', 'account');
         define('XML_KEY', 'user');
     }
@@ -62,6 +63,11 @@ class Account extends REST_Controller    {
         }  
     }
     
+    /**
+     * Get user details
+     * @since 05-06-2013
+     * @author Robin <robin@cubettech.com>
+     */
     public function user_get(){
         $key = $this->get('key');
         $token = $this->get('token');
@@ -77,8 +83,60 @@ class Account extends REST_Controller    {
         $user_id  = $this->get('user_id');
         
         $userDetails = $this->apiaccount_model->userDetails($user_id);
+        $userDetails['followers'] = $this->action_model->getUserFollowersCount($userDetails['id']);
+        $userDetails['following'] = $this->action_model->getUserFollowingCount($userDetails['id']);
+        
         $this->response($userDetails, 200);
     }
+    
+    /**
+     * Check for email uniqueness
+     * @since 06-06-2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function confirmEmail_post(){
+        $key = $this->post('key');
+        $token = $this->post('token');
+
+        $is_authenticated = $this->authapi->authenticate($key, $token);
+
+        //Check if user is authenticated, if not, return error response
+        if($is_authenticated == 0) 
+        {
+            $this->response(array('error' =>  'Authentication Failed'), 401);
+        }
+        
+        $email  = $this->post('email');
+        
+        $userDetails = $this->apiaccount_model->check_email($email);
+        
+        $this->response($userDetails, 200);
+    }
+    
+    /**
+     * Check username uniqueness
+     * @since 06-06-2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function confirmUsername_post(){
+        $key = $this->post('key');
+        $token = $this->post('token');
+
+        $is_authenticated = $this->authapi->authenticate($key, $token);
+
+        //Check if user is authenticated, if not, return error response
+        if($is_authenticated == 0) 
+        {
+            $this->response(array('error' =>  'Authentication Failed'), 401);
+        }
+        
+        $user_id  = $this->post('username');
+        
+        $userDetails = $this->apiaccount_model->check_username($user_id);
+        
+        $this->response($userDetails, 200);
+    }
+    
     /**
      * Register function
      * @since 29-05-2013

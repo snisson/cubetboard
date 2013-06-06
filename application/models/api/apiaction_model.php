@@ -186,6 +186,28 @@ class Apiaction_model extends CI_Model {
             return false;
         }
     }
+    
+     /**
+     * Function to a get boards of a user
+     * @param  : <int> $id
+     * @author : Robin
+     * @since  : 06-06-2013
+     * @return : array
+     */
+    function getUserBoards($id)
+    {
+        $sql    = "SELECT 
+                        *
+                    FROM
+                        board
+                    WHERE
+                        user_id = $id
+                    ORDER BY
+                        board_position ASC";
+        $query  = $this->db->query($sql);
+        
+        return $query->result_array();
+    }
 }
 
 /* End of file apiaction_model.php */ 
