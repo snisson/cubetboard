@@ -162,7 +162,7 @@ class Apiaction_model extends CI_Model {
      */
     public function create_board($board) {
         if($this->db->insert('board', $board)) {
-            return true;
+            return mysql_insert_id();
         } else {
             return false;
         }

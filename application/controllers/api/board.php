@@ -113,7 +113,7 @@ class Board extends REST_Controller    {
         $desc = $this->get('description');
         $category = $this->get('category');
         
-        if(!$user_id || !$board_name || !$category) {
+        if(!$user_id || !$board_name) {
            $this->response(array('error' =>  'Give me some inputs !'), 200); 
         }
         
@@ -125,8 +125,8 @@ class Board extends REST_Controller    {
                         'user_id' => $user_id,
         );
         
-        if($this->apiaction_model->create_board($board)) {
-            $this->response(array('success' => 'Board Created!'), 200);
+        if($id = $this->apiaction_model->create_board($board)) {
+            $this->response(array('id' => $id), 200);
         } else {
             $this->response(array('error' => 'Something wrong!'), 200);
         }

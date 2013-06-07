@@ -124,13 +124,14 @@ class Apiaction extends REST_Controller    {
         }
         
          
-        $image_data = $this->post('image_data');
-        $insert['description']     = $this->post('description') ? : '';
+        $image_data = $this->post('image_data');        
+        
+        $insert['description']     = $this->post('description') ? $this->post('description') : '';
         $insert['user_id']         = $user_id = $this->post('user_id');
         $insert['board_id']        = $boardId = $this->post('board_id');
-        $insert['type']            = $this->post('type') ? : 'image';
-        $insert['source_url']      = $this->post('link') ? : ''; 
-        $insert['gift']            = $this->post('gift') ? : ''; 
+        $insert['type']            = $this->post('type') ? $this->post('type') : 'image';
+        $insert['source_url']      = $this->post('link') ? $this->post('link') : ''; 
+        $insert['gift']            = $this->post('gift') ? $this->post('gift') : ''; 
 
         
         if($image_data) { 
@@ -202,7 +203,7 @@ class Apiaction extends REST_Controller    {
                         'source_url'=> $pinDetails->source_url,
                         'board_id'=> $board_id,
                         'type'    => $pinDetails->type,
-                        'description'=> $this->get('description') ? : $pinDetails->description,
+                        'description'=> $this->get('description') ? $this->get('description') : $pinDetails->description,
         );
         
         $id = $this->board_model->saveNewPin($value);
