@@ -162,6 +162,7 @@ class Account extends REST_Controller    {
         $email = $this->post('email');
         $password = md5($this->post('password'));
         $connect_by = $this->post('connect_by');
+        $desc = $this->post('description') ? $this->post('description') : '';
         
         $data = array(  'username' => $username,
                         'first_name' => $firstname,
@@ -169,6 +170,7 @@ class Account extends REST_Controller    {
                         'last_name' => $last_name,
                         'location' => $location,
                         'connect_by' => $connect_by,
+                        'description' => $desc,
                         'email' => $email,
                         'password' => $password,
                         'status' => 1,

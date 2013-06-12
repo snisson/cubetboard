@@ -15,7 +15,9 @@ class Pins extends CI_Controller {
     function __construct()
 	{
 		parent::__construct();
-        $this->sitelogin->entryCheck();
+                $this->sitelogin->entryCheck();
+                $this->load->library('image_lib');
+        
 	}
 
     /**
@@ -203,8 +205,38 @@ class Pins extends CI_Controller {
                     }
                     move_uploaded_file($_FILES["pin"]["tmp_name"],
                     getcwd()."/application/assets/pins/$user_id/" . $image);
+                    
+                    $img = $image;
+                    
                     $image = site_url("/application/assets/pins/$user_id/".$image);
+                    
+                    //creat ethumnail function by Robin
+                    $th_dir = getcwd()."/application/assets/pins/$user_id/thumb";
+                    if(file_exists($th_dir) && is_dir($th_dir))
+                    {
 
+                    }
+                    else{
+
+                        mkdir(getcwd()."/application/assets/pins/$user_id/thumb",0777);
+                    }
+                    
+                    $config['image_library'] = 'gd2';
+                    $config['source_image']	= getcwd()."/application/assets/pins/$user_id/" . $img;
+                    //$config['create_thumb'] = TRUE;
+                    $config['new_image'] = getcwd()."/application/assets/pins/$user_id/thumb/" . $img;
+                    $config['maintain_ratio'] = TRUE;
+                    $config['width']	 = 200;
+                    $config['height']	= 200;
+
+                    try {
+                        $this->image_lib->initialize($config);
+                        $this->image_lib->resize();
+                    } 
+                    catch (Exception $e)
+                    {
+                        die($e->getMessage());
+                    }
                 }
                 $insert['pin_url']      = $image;
                 //$insert['source_url']      = '';

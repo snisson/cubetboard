@@ -85,7 +85,14 @@ class Board extends REST_Controller    {
             }
             $result[$key]['owner_name'] = $owner['first_name'].' '.$owner['last_name'];
             $result[$key]['owner_img'] = $owner['image'];
+            //get thumb image
+            $img_name = basename($pin['pin_url']);
+            $dir_url = str_replace($img_name, "", $pin['pin_url']);
+            $result[$key]['pin_url'] = $dir_url . 'thumb/' . $img_name;
+            
             $result[$key]['board_name'] = $board['board_name'];
+            $result[$key]['likes'] = $this->board_model->getPinLikeCount($pin['id']);
+            $result[$key]['repins'] = $this->board_model->getRepinCount('from_pin_id',$pin['id']);
         }
         
         $this->response($result, 200);
@@ -196,7 +203,7 @@ class Board extends REST_Controller    {
         }
     }
     
-     /**
+    /**
      * Get pins on a board
      * @since 06 June 2013
      * @author Robin <robin@cubettech.com>
@@ -251,6 +258,43 @@ class Board extends REST_Controller    {
         
         if($this->board_model->deleteBoard($board_id)) {
             $this->response(array('success' => 'Board Deleted!'), 200);
+        } else {
+            $this->response(array('error' => 'Something wrong!'), 200);
+        }
+    }
+    
+    /**
+     * Get pins details
+     * @since 11 June 2013
+     * @author Robin <robin@cubettech.com>
+     */
+    public function getPinsDetails_get(){
+        $key = $this->get('key');
+        $token = $this->get('token');
+        
+        $is_authenticated = $this->authapi->authenticate($key, $token);
+            
+        //Check if user is authenticated, if not, return error response
+        if($is_authenticated == 0) 
+        {
+            $this->response(array('error' =>  'Authentication Failed'), 401);
+        }
+        
+        $board_id = $this->get('board_id') ? $this->get('board_id') : NULL;
+        $pin_id = $this->get('pin_id');
+        $user_id = $this->get('user_id');
+        
+        if(!$pin_id) {
+           $this->response(array('error' =>  'Give me all inputs !'), 401); 
+        }
+        
+        if($result['pin'] = $this->board_model->getPinDetails($pin_id, $board_id)) {
+            $result['comments'] = $this->board_model->getPinComments($pin_id);
+            $result['owner'] = $this->apiaccount_model->get_user($result['pin']->user_id);
+            $result['board'] = $this->apiaction_model->get_board($result['pin']->board_id);
+            $result['board_images'] = $this->board_model->getEachBoardPins($result['pin']->board_id, 4);
+            $result['like'] = $this->board_model->likeStatus($pin_id, $user_id);
+            $this->response($result, 200);
         } else {
             $this->response(array('error' => 'Something wrong!'), 200);
         }

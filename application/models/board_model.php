@@ -126,12 +126,16 @@ class Board_model extends CI_Model {
     function getPinComments($pin_id)
     {
         $sql    = "SELECT
-                        *
+                        comments.*, user.first_name, user.last_name, user.image as user_image
                     FROM
                         comments
+                    JOIN 
+                        user
+                    ON 
+                        user.id = comments.user_id
                     WHERE
-                        pin_id = $pin_id
-                    ORDER BY id asc";
+                        comments.pin_id = $pin_id
+                    ORDER BY comments.id asc";
         $query  = $this->db->query($sql);
         return $query->result();
     }
@@ -869,6 +873,7 @@ class Board_model extends CI_Model {
             return false;
         }
     }
+    
     /**
      * Function to get highest board position
      * @param  :
@@ -889,6 +894,26 @@ class Board_model extends CI_Model {
         }
         else{
             return 0;
+        }
+    }
+    
+    /**
+     * Function to check if user liked pin
+     * @param  :
+     * @author : Robin
+     * @since  : 12 -06-2013
+     * @return : boolean
+     */
+    function likeStatus($pinId, $userId){
+        $this->db->where('pin_id', $pinId);
+        $this->db->where('like_user_id', $userId);
+        
+        $query = $this->db->get('likes');
+        
+        if($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 

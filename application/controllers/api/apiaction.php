@@ -24,6 +24,7 @@ class Apiaction extends REST_Controller    {
         $this->load->helper('pinterest_helper');
         $this->load->model('api/apiaccount_model');
         $this->load->model('api/apiaction_model');
+        $this->load->library('image_lib');
         define('XML_HEADER', 'actions');
     }
     
@@ -60,9 +61,9 @@ class Apiaction extends REST_Controller    {
         );
         
         if($this->apiaction_model->add_like($like)) {
-             $this->response(array('success' =>  'Pin Liked'), 200);
+             $this->response(array('msg' =>  'Pin Liked'), 200);
         } else {
-             $this->response(array('error' =>  'Already liked! '), 200);
+             $this->response(array('msg' =>  'Already liked! '), 200);
         }
     }
     
@@ -98,9 +99,9 @@ class Apiaction extends REST_Controller    {
         );
         
         if($this->apiaction_model->remove_like($like)) {
-             $this->response(array('success' =>  'Like Removed'), 200);
+             $this->response(array('msg' =>  'Like Removed'), 200);
         } else {
-             $this->response(array('error' =>  'No Like exits!'), 200);
+             $this->response(array('msg' =>  'No Like exits!'), 200);
         }
     }
     
@@ -151,7 +152,35 @@ class Apiaction extends REST_Controller    {
             fwrite($fp, $imageData);
             fclose($fp); 
 
+            $img = $image;
             $image = site_url("/application/assets/pins/$user_id/".$image);
+
+             //creat ethumnail function by Robin
+            $th_dir = getcwd()."/application/assets/pins/$user_id/thumb";
+            if(file_exists($th_dir) && is_dir($th_dir))
+            {
+
+            }
+            else{
+
+                mkdir(getcwd()."/application/assets/pins/$user_id/thumb",0777);
+            }
+
+            $config['image_library'] = 'gd2';
+            $config['source_image']	= getcwd()."/application/assets/pins/$user_id/" . $img;
+            $config['new_image'] = getcwd()."/application/assets/pins/$user_id/thumb/" . $img;
+            $config['maintain_ratio'] = TRUE;
+            $config['width']	 = 100;
+            $config['height']	= 100;
+
+            try {
+                $this->image_lib->initialize($config);
+                $this->image_lib->resize();
+            } 
+            catch (Exception $e)
+            {
+                die($e->getMessage());
+            }
 
             $insert['pin_url']      = $image;
 
