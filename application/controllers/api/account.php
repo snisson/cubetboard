@@ -163,6 +163,8 @@ class Account extends REST_Controller    {
         $password = md5($this->post('password'));
         $connect_by = $this->post('connect_by');
         $desc = $this->post('description') ? $this->post('description') : '';
+        $imagename = 'User.png';
+        $imagename = site_url('application/assets/images/'.$imagename);
         
         $data = array(  'username' => $username,
                         'first_name' => $firstname,
@@ -172,6 +174,7 @@ class Account extends REST_Controller    {
                         'connect_by' => $connect_by,
                         'description' => $desc,
                         'email' => $email,
+                        'image' => $imagename,
                         'password' => $password,
                         'status' => 1,
                         'verification' => 'done'

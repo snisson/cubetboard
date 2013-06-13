@@ -25,6 +25,7 @@ class Board extends REST_Controller    {
         $this->load->model('api/apiaction_model');
         $this->load->model('api/apiaccount_model');
         define('XML_HEADER', 'boards');
+        $this->load->library('image_lib');
     }
     
     /**
@@ -32,7 +33,7 @@ class Board extends REST_Controller    {
      * @since 29 May 2013
      * @author Robin <robin@cubettech.com>
      */
-    public function index_get(){       
+    public function index_get(){    
         $key = $this->get('key');
         $token = $this->get('token');
         
@@ -293,7 +294,8 @@ class Board extends REST_Controller    {
             $result['owner'] = $this->apiaccount_model->get_user($result['pin']->user_id);
             $result['board'] = $this->apiaction_model->get_board($result['pin']->board_id);
             $result['board_images'] = $this->board_model->getEachBoardPins($result['pin']->board_id, 4);
-            $result['like'] = $this->board_model->likeStatus($pin_id, $user_id);
+            $result['like'] = $this->board_model->isLiked($pin_id, $user_id);
+            $result['repined'] = $this->apiaction_model->get_repin_source($pin_id);
             $this->response($result, 200);
         } else {
             $this->response(array('error' => 'Something wrong!'), 200);

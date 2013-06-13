@@ -582,8 +582,8 @@ class Board_model extends CI_Model {
      * Function to check whether a  pin is liked by a user?
      * @since 03-05-2012
      * @author Vishal Vijayan
-     * @param <Int> $userId;
      * @param <Int> $pinId;
+     * @param <Int> $userId;
      * @return object
      */
     function isLiked($pinId,$userId)
@@ -896,25 +896,4 @@ class Board_model extends CI_Model {
             return 0;
         }
     }
-    
-    /**
-     * Function to check if user liked pin
-     * @param  :
-     * @author : Robin
-     * @since  : 12 -06-2013
-     * @return : boolean
-     */
-    function likeStatus($pinId, $userId){
-        $this->db->where('pin_id', $pinId);
-        $this->db->where('like_user_id', $userId);
-        
-        $query = $this->db->get('likes');
-        
-        if($query->num_rows() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }

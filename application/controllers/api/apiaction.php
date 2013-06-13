@@ -203,10 +203,10 @@ class Apiaction extends REST_Controller    {
      * @since 31-05-2013
      * @author Robin <robin@cubettech.com>
      */
-    public function repin_get()
+    public function repin_post()
     {
-        $key = $this->get('key');
-        $token = $this->get('token');
+        $key = $this->post('key');
+        $token = $this->post('token');
 
         $is_authenticated = $this->authapi->authenticate($key, $token);
 
@@ -216,9 +216,9 @@ class Apiaction extends REST_Controller    {
             $this->response(array('error' =>  'Authentication Failed'), 401);
         }
         
-        $pin_id = $this->get('pin_id');
-        $user_id = $this->get('user_id');
-        $board_id = $this->get('board_id');
+        $pin_id = $this->post('pin_id');
+        $user_id = $this->post('user_id');
+        $board_id = $this->post('board_id');
         
         if(!$pin_id || !$user_id || !$board_id )
         {
@@ -310,7 +310,7 @@ class Apiaction extends REST_Controller    {
         $array['comments'] = $this->get('comment');
         
         if(!$array['user_id'] || !$array['pin_id'] || !$array['comments'] ) {
-           $this->response(array('error' =>  'Give me all the inputs !'), 401); 
+           $this->response(array('error' =>  'Give me all the inputs !'), 400); 
         }
        
         if($lastInsertId = $this->board_model->insertPinComments($array)){

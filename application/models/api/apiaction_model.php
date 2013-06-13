@@ -144,7 +144,11 @@ class Apiaction_model extends CI_Model {
      * @author Robin <robin@cubettech.com> 
      */
     function get_repin_source($pinid){
+        $this->db->select('repin.*, user.first_name as owner_first_name, user.middle_name as owner_middle_name,
+             user.last_name as owner_last_name, user.image as owner_img');
+        
         $this->db->where('new_pin_id', $pinid);
+        $this->db->join('user', 'user.id=repin.owner_user_id', 'left');
         $query = $this->db->get('repin');
         
         if($query->num_rows() != 0) {
