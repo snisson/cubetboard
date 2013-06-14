@@ -77,6 +77,7 @@ class Board extends REST_Controller    {
         foreach($result as $key => $pin){
             $owner = $this->apiaccount_model->get_user($pin['user_id']);
             $board = $this->apiaction_model->get_board($pin['board_id']);
+            //$result[$key]['board_images'] = $this->board_model->getEachBoardPins($pin['board_id'], 4);
             $repin = $this->apiaction_model->get_repin_source($pin['id']);
             if($repin) {
                  $result[$key]['repined'] = true;
@@ -198,36 +199,6 @@ class Board extends REST_Controller    {
         }
         
         if($result = $this->board_model->getBoardDetails($board_id)) {
-            $this->response($result, 200);
-        } else {
-            $this->response(array('error' => 'Something wrong!'), 200);
-        }
-    }
-    
-    /**
-     * Get pins on a board
-     * @since 06 June 2013
-     * @author Robin <robin@cubettech.com>
-     */
-    public function getPinsOnBoard_get(){
-        $key = $this->get('key');
-        $token = $this->get('token');
-        
-        $is_authenticated = $this->authapi->authenticate($key, $token);
-            
-        //Check if user is authenticated, if not, return error response
-        if($is_authenticated == 0) 
-        {
-            $this->response(array('error' =>  'Authentication Failed'), 401);
-        }
-        
-        $board_id = $this->get('board_id');
-        
-        if(!$board_id) {
-           $this->response(array('error' =>  'Give me some inputs !'), 401); 
-        }
-        
-        if($result = $this->board_model->getEachBoardPins($board_id)) {
             $this->response($result, 200);
         } else {
             $this->response(array('error' => 'Something wrong!'), 200);

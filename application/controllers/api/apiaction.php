@@ -145,7 +145,9 @@ class Apiaction extends REST_Controller    {
 
             if(! file_exists($dir) || !is_dir($dir))
             {
+                $oldmask = umask(0);
                mkdir(getcwd()."/application/assets/pins/$user_id",0777);
+               umask($oldmask);
             }
 
             $fp = fopen(getcwd()."/application/assets/pins/$user_id/" . $image, 'w');
@@ -163,7 +165,9 @@ class Apiaction extends REST_Controller    {
             }
             else{
 
+                $oldmask = umask(0);
                 mkdir(getcwd()."/application/assets/pins/$user_id/thumb",0777);
+                umask($oldmask);
             }
 
             $config['image_library'] = 'gd2';
@@ -292,10 +296,10 @@ class Apiaction extends REST_Controller    {
     * @since 31 May 2013
     * @author Robin <robin@cubettech.com>
     */
-    function addComment_get() {
+    function addComment_post() {
         
-        $key = $this->get('key');
-        $token = $this->get('token');
+        $key = $this->post('key');
+        $token = $this->post('token');
         
         $is_authenticated = $this->authapi->authenticate($key, $token);
             
@@ -305,9 +309,9 @@ class Apiaction extends REST_Controller    {
             $this->response(array('error' =>  'Authentication Failed'), 401);
         }
         
-        $array['user_id'] = $this->get('user_id');
-        $array['pin_id'] = $this->get('pin_id');
-        $array['comments'] = $this->get('comment');
+        $array['user_id'] = $this->post('user_id');
+        $array['pin_id'] = $this->post('pin_id');
+        $array['comments'] = $this->post('comment');
         
         if(!$array['user_id'] || !$array['pin_id'] || !$array['comments'] ) {
            $this->response(array('error' =>  'Give me all the inputs !'), 400); 

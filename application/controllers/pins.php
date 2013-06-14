@@ -201,7 +201,9 @@ class Pins extends CI_Controller {
                     }
                     else{
 
+                        $oldmask = umask(0);
                         mkdir(getcwd()."/application/assets/pins/$user_id",0777);
+                        umask($oldmask);
                     }
                     move_uploaded_file($_FILES["pin"]["tmp_name"],
                     getcwd()."/application/assets/pins/$user_id/" . $image);
@@ -218,7 +220,9 @@ class Pins extends CI_Controller {
                     }
                     else{
 
+                        $oldmask = umask(0);
                         mkdir(getcwd()."/application/assets/pins/$user_id/thumb",0777);
+                        umask($oldmask);
                     }
                     
                     $config['image_library'] = 'gd2';

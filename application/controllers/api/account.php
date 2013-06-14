@@ -163,8 +163,17 @@ class Account extends REST_Controller    {
         $password = md5($this->post('password'));
         $connect_by = $this->post('connect_by');
         $desc = $this->post('description') ? $this->post('description') : '';
-        $imagename = 'User.png';
-        $imagename = site_url('application/assets/images/'.$imagename);
+        $image = $this->post('image_url') ? $this->post('image_url') : false;
+        
+        if($image) {
+            $image_path = getcwd()."/application/assets/images/{$username}.jpg";
+            copy($image, $image_path);
+            $imagename = $username . '.jpg';
+        } else {
+            $imagename = 'User.png';
+        }
+        
+        $imagename = site_url('application/assets/images/'.$imagename);  
         
         $data = array(  'username' => $username,
                         'first_name' => $firstname,
