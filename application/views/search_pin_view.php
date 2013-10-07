@@ -12,10 +12,12 @@
                             <?php endif; ?>
 
                         </label></div>
-                    <div id="info_center">
+<!--              
+//Modified by Ansa<ansa@cubettech.com> on 30/09/2013.
+<div id="info_center">
                         <h3>Filter the search by</h3>
                         <a style="color:#CB2027;">Pins</a> | <a href="<?php echo site_url('search/filter/board/' . $searchItem) ?>">Board</a> | <a href="<?php echo site_url('search/filter/user/' . $searchItem) ?>">People</a>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>

@@ -19,7 +19,8 @@ class Search extends CI_Controller {
 	}
 
     /**
-     * Function to search the site based on the filter(pins/boards/user) and search item
+     * Function to search the site based on the filter(pins) and search item
+     * Modified by ansa<ansa@cubettech.com> on 30-09-2013.
      * @param  : $filter , $searchItem
      * @author : Vishal
      * @since  : 21-05-2012
@@ -29,7 +30,7 @@ class Search extends CI_Controller {
 	 {
           $searchItem               = $this->input->post('q')?$this->input->post('q'):$searchItem;
           $searchItem               = str_replace('%20', ' ', $searchItem);
-          $filter                   = ($filter)?$filter:'user';
+          $filter                   = ($filter)?$filter:'pin';
           $data['result']           =  $searchResult  = $this->action_model->search($filter,$searchItem);
           $data['title']            = 'Search';
           $data['filter']           = $filter;

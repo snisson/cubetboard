@@ -160,7 +160,12 @@ class Administrator extends CI_Controller {
      * @since  : 14-05-2012
      * @return :
      */
+
+    /**
+     * Modified by Ansa<ansa@cubettech.com> on 03/10/2013.
+     */
     function updateUserStatus() {
+
         $this->sitelogin->entryAdminCheck();
         $update['status'] = $this->input->post('status');
         $id = $this->input->post('id');
@@ -177,24 +182,35 @@ class Administrator extends CI_Controller {
      * @since  : 22-05-2012
      * @return
      */
+
+    /**
+     * 
+     * Modified by Ansa<ansa@cubettech.com> on 03-10-2013
+     *
+     */
     function pin($action, $user_id = false) {
         $this->sitelogin->entryAdminCheck();
         if ($action == 'view') {
+
             $data['title'] = "Pins view";
             $this->load->library('pagination');
             if (($_POST) || ($this->uri->segment(5))) {
                 if ($this->input->post("search")) {
                     $user = $this->input->post("search");
+                   // echo $user;die;
                     $userArray = explode(' ', $user);
+                   // echo $user;die;
                     $user_id = $userArray[0];
-                } else {
+               } else {
                     $user_id = $this->uri->segment(4);
+                    //echo $user_id."hjgydfjhd";die;
                 }
                 $count = $this->admin_model->getAllPinsCount($user_id);
                 $config['uri_segment'] = 5;
                 $config['base_url'] = site_url('administrator/pin/view/' . $user_id);
                 $offset = $this->uri->segment(5, 0);
             } else {
+               
                 $count = $this->admin_model->getAllPinsCount();
                 $config['uri_segment'] = 4;
                 $config['base_url'] = site_url('administrator/pin/view/');
@@ -460,6 +476,9 @@ class Administrator extends CI_Controller {
      * @author : Vishal
      * @since  : 22-05-2012
      * @return
+     */
+    /*
+     * Modified by Ansa<ansa@cubettech.com> on 04/10/2013.
      */
     function board($action, $user_id = false) {
         $this->sitelogin->entryAdminCheck();
@@ -737,7 +756,7 @@ class Administrator extends CI_Controller {
         $q = $_REQUEST['q'];
         $searchResult = $this->admin_model->search($q);
         foreach ($searchResult as $key => $row) {
-            echo "<img src='$row->image' width=20px; height=20px/>" . "-$row->id $row->first_name $row->last_name \n";
+            echo "$row->id  $row->first_name $row->last_name \n";
         }
     }
 

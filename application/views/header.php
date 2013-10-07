@@ -42,8 +42,8 @@
     <link href="<?php echo base_url(); ?>application/assets/css/cubetboard.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>application/assets/css/style1.css" rel="stylesheet" type="text/css" />
 
-    <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <!--<script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>application/scripts/jquery-ui-1.8.1.custom.min.js" type="text/javascript"></script>
     <script type="text/javascript">if (window.location.hash == '#_=_')window.location.hash = '';</script>
 
@@ -99,8 +99,8 @@
                     <?php if($this->session->userdata('login_user_id')):?>
                     <div class="search_box">
                         <form action="<?php echo site_url('search/filter')?>" method="post">
-
-                            <input name="q" type="text" class="form-field-input" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" value="Search...."/>
+<!--                            //Modified by Ansa<ansa@cubettech.com > on 30/09/2013-->
+                            <input name="q" type="text" class="form-field-input" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" value="Search by Pin...."/>
                            
                             <input name="Search" class="search_button" type="submit" src="images/search_icon.png" value=""/>
                         </form>

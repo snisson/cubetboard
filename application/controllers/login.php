@@ -160,6 +160,31 @@ class Login extends CI_Controller {
         $return = $this->login_model->insertInvitedId($idArray);
         echo json_encode($return);
     }
+    
+    /**
+     * Function handle the user validation for log in.
+     * @author <vishnu@cubettech.com>
+     * @date 21-09-2013
+     * @param int email email address
+     * @param int password password
+     * @return string
+     */
+    
+    function validateLogin(){
+
+         $this->load->model('facebook_model');
+         $email     = $this->input->post('email');
+         $password  = md5($this->input->post('password'));
+         $login     = $this->facebook_model->checkLogin($email,$password);
+         if($login){
+             echo  1; 
+         } else{
+             
+             echo 0; 
+         }
+    }
+    
+    
 }
 /* End of file login.php */
 /* Location: ./application/controllers/login.php */

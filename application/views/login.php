@@ -5,12 +5,24 @@
         <title>Welcome to cubetboard</title>
         <link rel="icon" href="<?php echo base_url(); ?>application/assets/images/favicon.ico" type="image/x-icon" />
         <link href="<?php echo base_url(); ?>application/assets/css/cubetboard.css" rel="stylesheet" type="text/css" />
-        <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<!--        <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js"></script>-->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="<?php echo base_url(); ?>application/scripts/jquery-ui-1.8.1.custom.min.js" type="text/javascript"></script>
+        <script src="<?php echo base_url(); ?>application/scripts/jquery.validate.js" type="text/javascript"></script>
     </head>
+    <style type="text/css">
+        label.error {
+            color: #D20000;
+            float: left;
+        } 
+        .login_box input.error {
+            color: #000;
+        }
 
+    </style>
     <body>
+
+
         <div class="outer">
             <div class="header"><!-- starting Header -->
                 <div class="container"><!-- starting container -->
@@ -44,7 +56,8 @@
                                 </div>
                                 <div class="login_box">
                                     <!--                            <form class="login_normal" action="/ci/pinterest/login/normal" method="POST" accept-charset="utf-8">-->
-                                    <form class="login_normal" action="<?php echo site_url(); ?>login/normal" method="POST" accept-charset="utf-8">
+                                    <form id="login_form" class="login_normal" action="<?php echo site_url(); ?>login/normal" method="POST" accept-charset="utf-8" >
+                                        <span id="login_error" class="error"></span>
                                         <ul class="login_form">
                                             <li>
                                                 <h2>Normal Login</h2>
@@ -54,22 +67,22 @@
                                             </li>
 
                                             <li>
-                                                <input id="id_email" name="email" type="text" class="inputform-field" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" value=""/>
+                                                <input id="id_email" name="email" type="text" class="inputform-field required email" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" value=""/>
                                                 <label>Email Address</label>
                                                 <span id="email_error" class="error"></span>
 
                                             </li>
 
                                             <li id="password_li">
-                                                <input id="id_password" name="password" type="password" class="inputform-field" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" value=""/>
+                                                <input id="id_password" name="password" type="password" class="inputform-field required" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" value=""/>
                                                 <label>Password</label>
-                                                <span class="pass_error"></span>
+                                                <span class="pass_error error" id="pass_error"></span>
                                             </li>
 
                                         </ul>
 
                                         <div class="non_inputs">
-                                            <input type="submit" name="submit" value="Login" id="login" class="Button2 Button13 WhiteButton"/>
+                                            <input type="button" onClick="userValidation();" value="login" id="login" class="Button2 Button13 WhiteButton"/>
                                             <a id="resetPass" class="colorless" href="#" onclick="forgetPass('show')">Forgot your password?</a>
                                             <a href="#" class="Button2 Button13 WhiteButton" id="reset" onclick="forgetPass('save')" style="display: none"><strong>Reset</strong><span></span></a>
                                             <a id="back" style="display: none;" href="#" class="colorless" onclick="forgetPass('back')">Back to Login?</a>
@@ -90,6 +103,17 @@
     </body>
 </html>
 <script type="text/javascript">
+    $(document).ready(function(){
+        
+        $('#id_email').click(function(){
+            $('#email_error').html('');
+        });
+        
+        $('#id_password').click(function(){
+            $('#pass_error').html('');
+        });
+    });
+    
     function forgetPass(type)
     {   $('#email_error').html('')
         $('#reset_message').html('')
@@ -139,4 +163,38 @@
         }
 
     }
+    
+    
+    function userValidation(){
+    
+        var form = $("#login_form");
+        form.validate();
+
+        if(form.valid()){
+
+            var email    = $('#id_email').val();
+            var password = $('#id_password').val();
+
+            $.ajax({
+                data:{'email':email,'password':password},
+                type: 'post',
+                url:'<?php echo base_url(); ?>login/validateLogin',
+                dataType:'json',
+                cache: false,
+                success:function(result){
+                    if(result != 1){
+                        $('#login_error').html('Invalid email or password.');
+                    }else{
+                        $('#login_form').submit();
+                    }
+
+                }
+
+            });
+
+        }
+   
+    
+    }
+   
 </script>

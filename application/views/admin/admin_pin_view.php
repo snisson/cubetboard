@@ -7,21 +7,23 @@
                 <div class="Box_Content">
                     <div id="Shorts_key" class="sub_box">
                         <h2>PIN MANAGEMENT</h2>
+                        <?php //Modified by Ansa<ansa@cubettech.com on 03/10/2013>?>
                         <!--search for a user -->
                         <form method="post" action="<?php echo site_url('administrator/pin/view') ?>">
-                            <input type="text" name="search" id="search" />
+                          <b> Search By User_Id,Pin Name</b><input type="text" name="search" id="search" />
                             <input type="submit" name="submit" id="submit" value="submit" />
                         </form>
                         
                         <div id="pin_pagination">
                         <?php echo $this->pagination->create_links(); ?>
                         </div>
-                        <?php ?>
-                        <?php if(!empty ($result)):?>
+<!--                        //  Modified by Ansa<ansa@cubettech.com> on 04/10/2013.-->
+                       <?php if(!empty ($result)){?>
+                        <div style="margin-top:30px; width:100%;">
                             <table>
-                                <thead>
+                                <thead style="height:80%;">
                                     <th>Pin id</th>
-                                    <th>pin name</th>
+                                    <th>Pin name</th>
                                     <th>board id</th>
                                     <th>board name</th>
                                     <th>user name</th>
@@ -35,8 +37,11 @@
                                         <tr id="tr_<?php echo $value->id;?>">
 
                                             <td><?php echo $value->id;?></td>
-
-                                            <td><?php echo $value->description;?></td>
+                                        <!--    Modified by Ansa<ansa@cubettech.com> on 04/10/2013-->
+                                            <td><?php $desc= $value->description;
+                                            $pin_name = substr($desc, 0, 30);
+                                            echo  $pin_name;
+                                            ?></td>
 
                                             <td><?php echo $value->board_id;?></td>
 
@@ -55,14 +60,19 @@
                                 </tbody>
 
                             </table>
+                        </div>
                             <?php $current=current_url();?>
-                        <?php endif?>
+                        <?php }
+                        else {
+                            
+                        ?>
                         <span id="message"></span>
                         <div id="bar_chat_wrapper" class="k-content">
                             <div class="chart-wrapper">
-                                <div id="chart"></div>
+                                <div id="chart">No Result Found...</div>
                             </div>
                         </div>
+                        <?php  } ?>
                     </div>
                 </div>
         </div>

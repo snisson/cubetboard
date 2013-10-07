@@ -26,6 +26,20 @@
                                             <td><?php echo $value->first_name;?></td>
                                             <td ><?php echo $value->email;?></td>
                                             <td>
+<!--                                          // Modified by Ansa<ansa@cubettech.com> on 03/10/2013,
+                                              //To set status in onClick function.-->
+                                                <?php
+                                                if($value->status == 1)
+                                                {
+                                                    $status=0;
+                                                }
+                                                else {
+                                                    
+                                                    $status=1;
+                                                }
+                                                
+                                                
+                                                ?>
                                             <p style="display:none" id="active_<?php echo $value->id;?>"><?php echo $value->status;?></p>
                                             
                                             <a href="#" id="status_<?php echo $value->id;?>" onclick="status(<?php echo $value->id?>)">
@@ -90,14 +104,14 @@ function status(id)
 	        success: function(data){
                if(data==true)
                {
-                   if(active==1)
+                   if(active==0)
                     {
                         $('#status_'+id).html("<img src='<?php echo site_url('application/assets/images/admin/disable.png')?>'/>");
-                        $('#active_'+id).html(0);
-                    }
-                    if(active==0){
-                        $('#status_'+id).html("<img src='<?php echo site_url('application/assets/images/admin/enable.png')?>'/>");
                         $('#active_'+id).html(1);
+                    }
+                    if(active==1){
+                        $('#status_'+id).html("<img src='<?php echo site_url('application/assets/images/admin/enable.png')?>'/>");
+                        $('#active_'+id).html(0);
                     }
                }
             }

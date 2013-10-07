@@ -118,8 +118,8 @@ class Auth extends CI_Controller
         $this->load->model('Facebook_model');
         $fb_data = $this->session->userdata('fb_data');
 		$data = array('fb_data' => $fb_data,);
-
-		$this->session->set_userdata(array('twitter_id' => '', 'facebook_id' => ''));
+        $this->session->unset_userdata('fb_data');
+	$this->session->set_userdata(array('twitter_id' => '', 'facebook_id' => ''));
         $this->session->unset_userdata('twitter_id');
         $this->session->unset_userdata('status');
         $this->session->unset_userdata('username');
@@ -136,24 +136,14 @@ class Auth extends CI_Controller
 
         
         $this->session->set_userdata('noentry_message', urldecode($messgae));
-        
-        //echo    $this->session->userdata('noentry_message');
-        //if($noentry=='noentry')
-        //{
+        if(!empty($fb_data)) {            
+            setcookie('fbs_'.  $this->facebook->getAppId(), '', time()-100, '/', 'domain.com');
+            session_destroy();
             redirect();
-        //}
-        //else{
-            //redirect($data['fb_data']['logoutUrl']);
-        //}
-        //echo $this->session->userdata('noentry_message');
-       // exit(0000000000000);
-        
-        
-
-
-		//$this->_show_message($this->lang->line('auth_message_logged_out'));
-        
-	}
+        } else {
+            redirect();
+        }
+        }
 
 	/**
 	 * Register user on the site

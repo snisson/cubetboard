@@ -101,14 +101,18 @@ class Admin_model extends CI_Model {
      * @param <Int> $userID;
      * @return <int> id
      */
+    /**
+     * 
+     * Modified by Ansa<ansa@cubettech.com> on 03/10/2013.
+     * 
+     */
     function getAllPins($userID = false, $order = false, $offset, $limit) {
         $sql = "SELECT * 
                     FROM
                         pins";
-
-        if ($userID)
+         if ($userID)
             $sql .= " WHERE 
-                        user_id = $userID ";
+                        user_id = '".$userID."' or description like '%".$userID."%'" ;
 
         if ($order) {
             $sql .= " ORDER BY
@@ -119,14 +123,13 @@ class Admin_model extends CI_Model {
         }
         $sql.=" LIMIT $offset,$limit";
 
-
-        $query = $this->db->query($sql);
+         $query = $this->db->query($sql);
         if ($query->num_rows() > 0) {
             $row = $query->result();
             return $row;
         }
     }
-
+    
     /**
      * Function to get the count of pins from pins table based on userid or get all the pins count irrespective of user
      * @since 22-05-2012
@@ -134,10 +137,17 @@ class Admin_model extends CI_Model {
      * @param <Int> $userid;
      * @return 
      */
+    
+    /**
+     * 
+     * Modified by Ansa<ansa@cubettech.com> on 03-10-2013
+     *
+     */
     function getAllPinsCount($userid = false) {
         if ($userid) {
-            $this->db->select('id');
-            $this->db->where('user_id', $userid);
+            $this->db->select('*');
+            $this->db->where('user_id', $userid,true);
+            $this->db->or_like('description', $userid, false);
             $query = $this->db->get('pins');
             return $query->num_rows();
         } else {
@@ -325,11 +335,15 @@ class Admin_model extends CI_Model {
      * @since  : 23-05-2012
      * @return :
      */
+     /*
+     * Modified by Ansa<ansa@cubettech.com> on 04/10/2013.
+     */
     function getAllBoardsCount($userId = false) {
 
         if ($userId) {
-            $this->db->select('id');
-            $this->db->where('user_id', $userId);
+            $this->db->select('*');
+            $this->db->where('user_id', $userId, true);
+            $this->db->or_like('board_name', $userId, false);
             $query = $this->db->get('board');
             return $query->num_rows();
         } else {
@@ -344,11 +358,15 @@ class Admin_model extends CI_Model {
      * @since  : 23-05-2012
      * @return :
      */
+    /**
+     * 
+     *Modified by Ansa<ansa@cubettech.com> on 04/10/2013.
+     */
     function getAllBoards($userID = false, $order = false, $offset, $limit) {
         $sql = "SELECT * from board";
 
         if ($userID)
-            $sql .= " WHERE user_id= $userID ";
+            $sql .= " WHERE user_id= '".$userID ."' or board_name like '%".$userID."%'";
 
         if ($order) {
             $sql .= " ORDER BY
@@ -436,10 +454,14 @@ class Admin_model extends CI_Model {
      * @since  : 23-05-2012
      * @return :
      */
+    /**
+     * Modified by Ansa<ansa@cubettech.com> on 03/10/2013.
+     */
     function updateUserStatus($update, $id) {
-        $this->db->where('id', $id);
-        $this->db->update('user', $update);
-        return true;
+       
+       $this->db->where('id', $id);
+       $this->db->update('user', $update);
+       return true;
     }
 
     /**

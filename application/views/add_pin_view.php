@@ -1,5 +1,5 @@
-<script src="<?php echo base_url(); ?>application/scripts/jquery.js" type="text/javascript"></script>
-<script src="<?php echo base_url(); ?>application/src/facebox.js" type="text/javascript"></script>
+<!--<script src="< ?php echo base_url(); ?>application/scripts/jquery.js" type="text/javascript"></script>
+<script src="< ?php echo base_url(); ?>application/src/facebox.js" type="text/javascript"></script>-->
 <style>
     .imageContainer{
         float: left;

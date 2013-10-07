@@ -1,5 +1,5 @@
-<script src="<?php echo base_url(); ?>application/scripts/jquery.js" type="text/javascript"></script>
-<script src="<?php echo base_url(); ?>application/src/facebox.js" type="text/javascript"></script>
+<!--<script src="< ?php echo base_url(); ?>application/scripts/jquery.js" type="text/javascript"></script>
+<script src="< ?php echo base_url(); ?>application/src/facebox.js" type="text/javascript"></script>-->
 <div id="fancybox-outer">
 <div class="fancybox-bg" id="fancybox-bg-n">
 </div>

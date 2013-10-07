@@ -54,8 +54,7 @@ $(document).ready(function () { // When the dom is ready
                    }
                 });
 
-                
-                 return false();
+                 return false;
                  
             }
             }  

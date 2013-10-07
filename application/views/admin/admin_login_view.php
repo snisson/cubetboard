@@ -53,6 +53,16 @@
 </div>
  
 <script type="text/javascript">
+//  Modified by Ansa<ansa@cubettech.com> on 04/10/2013.
+$(document).ready(function(){
+    $("#password").keypress(function(e){
+   if(e.keyCode==13)
+   {
+      validateLogin();
+   }
+  });
+
+});
 function validateLogin()
 {   
     username = $('input#username').val()

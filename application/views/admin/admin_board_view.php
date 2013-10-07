@@ -9,15 +9,15 @@
                         <h2>BOARD MANAGEMENT</h2>
                         <!--search for a user -->
                         <form method="post" action="<?php echo site_url('administrator/board/view') ?>">
-                            <input type="text" name="search" id="search" />
+                            <b> Search by Board Name,User Id </b><input type="text" name="search" id="search" />
                             <input type="submit" name="submit" id="submit" value="submit" />
                         </form>
 
                         <div id="pin_pagination">
                         <?php echo $this->pagination->create_links(); ?>
                         </div>
-                        <?php ?>
-                        <?php if(!empty ($result)):?>
+                        <?php // Modified by Ansa<ansa@cubettech.com> on 04/10/2013.?>
+                        <?php if(!empty ($result)){?>
                             <table>
                                 <thead>
                                     <th>Board id</th>
@@ -58,13 +58,16 @@
 
                             </table>
                             <?php $current=current_url();?>
-                        <?php endif?>
+                        <?php }
+                        else
+                        {?>
                         <span id="message"></span>
                         <div id="bar_chat_wrapper" class="k-content">
                             <div class="chart-wrapper">
-                                <div id="chart"></div>
+                                <div id="chart">No Result Found...</div>
                             </div>
                         </div>
+                        <?php } ?>
                     </div>
                 </div>
         </div>

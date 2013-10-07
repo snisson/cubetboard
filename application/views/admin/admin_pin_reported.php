@@ -14,8 +14,9 @@
                         </form>
 
                         
-                        <?php ?>
+                        <?php //  Modified by Ansa<ansa@cubettech.com> on 04/10/2013. ?>
                         <?php if(!empty ($result)):?>
+                         <div style="margin-top:30px; width:100%;">
                             <table>
                                 <thead>
                                     <th>Pin id</th>
@@ -63,6 +64,7 @@
                                 </tbody>
 
                             </table>
+                         </div>
                             <?php $current=current_url();?>
                         <?php else:?>
                             <h1>No pins reported</h1>
