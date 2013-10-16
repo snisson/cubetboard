@@ -43,10 +43,14 @@ class Editprofile_model extends CI_Model {
      * @since  : 20-03-2012
      * @return
      */
-    function saveProfile($_POST,$referenceId,$reference)
+    /*
+     * Modified by Ansa<ansa@cubettech.com> on 16/10/2013.
+     * @param   : $details,$referenceId,$reference.
+     */
+    function saveProfile($details,$referenceId,$reference)
     {
         $this->db->where($reference, "$referenceId");
-        $this->db->update('user', $_POST);
+        $this->db->update('user', $details);
         //echo $this->db->last_query();
     }
     /*getPrimaryID
