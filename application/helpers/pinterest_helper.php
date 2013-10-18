@@ -618,5 +618,21 @@
         $result = $CI->board_model->highestBoard($userId);
         return $result;
     }
+     /**
+     * Function to check repin existence
+     * @param  :
+     * @author : Ansa<ansa@cubettech.com>
+     * @since  : 16-10-2013
+     * @return
+     */
+    function checkRepinExist($userId,$pinid)
+    {
+        $CI     = & get_instance();
+        $CI->load->model('board_model');
+        $result = $CI->board_model->checkRepin($userId,$pinid);
+        return $result;
+       // echo "5";
+        
+    }
 /* End of file pinterest_helper.php */
 /* Location: ./application/helpers/pinterest_helper.php */

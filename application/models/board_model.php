@@ -330,7 +330,7 @@ class Board_model extends CI_Model {
      */
     function saveEditPin($pinId,$pinArray)
     {
-        $this->db->where('id', $pinId);
+       $this->db->where('id', $pinId);
         $this->db->update('pins', $pinArray);
         return true;
     }
@@ -894,6 +894,26 @@ class Board_model extends CI_Model {
         }
         else{
             return 0;
+        }
+    }
+    
+      /**
+     * Function to get repin details
+     * @param  :
+     * @author : Ansa
+     * @since  : 16-10-2013
+     * @return
+     */
+    function checkRepin($userId,$pinid)
+    {
+        $sql="SELECT * FROM `repin` WHERE repin_user_id=".$userId." and new_pin_id=".$pinid;
+        $query = $this->db->query($sql);
+        if($query->num_rows()>0)
+        {  $row = $query->row();
+            return true;
+        }
+        else{
+            return false;
         }
     }
 }
