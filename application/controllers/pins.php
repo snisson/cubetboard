@@ -170,7 +170,7 @@ class Pins extends CI_Controller {
     /**
      * Function save the new uploaded an pin
      * @param  :
-     * @author : Vishal
+     * @author : Vishal,Vishnu <vishnu@cubettech.com>
      * @since  : 23-05-2012
      * @return :
      */
@@ -217,6 +217,7 @@ class Pins extends CI_Controller {
                         umask($oldmask);
                     }
 
+                    //Modification by vishnu@cubettech.com on 27-09-2013 starts here
                     $config['image_library'] = 'gd2';
                     $config['source_image'] = getcwd() . "/application/assets/pins/$user_id/" . $img;
                     //$config['create_thumb'] = TRUE;
@@ -231,6 +232,8 @@ class Pins extends CI_Controller {
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
+
+                    //Modification by vishnu@cubettech.com on 27-09-2013 ends here
                 }
                 $insert['pin_url'] = $image;
                 //$insert['source_url']      = '';
@@ -247,19 +250,18 @@ class Pins extends CI_Controller {
     /**
      * Function save the new add pin
      * @param  :
-     * @author : Aneesh T
+     * @author : Aneesh T ,Vishnu <vishnu@cubettech.com>
      * @since  : 19-02-2013
      * @return :
      */
     function saveAddPin() {
+        
         $insert['description'] = $this->input->post('description');
         $insert['user_id'] = $user_id = $this->session->userdata('login_user_id');
         $insert['board_id'] = $boardId = $this->input->post('board_id');
         $insert['type'] = 'image';
         $insert['source_url'] = $this->input->post('link');
         $remoteUrl = $this->input->post('current_img_src');
-
-
         if ($remoteUrl) {
             $dir = getcwd() . "/application/assets/pins/$user_id";
             if (!file_exists($dir) || !is_dir($dir)) {
@@ -273,6 +275,24 @@ class Pins extends CI_Controller {
             file_put_contents(getcwd() . "/application/assets/pins/$user_id/" . $image, file_get_contents($remoteUrl));
 
             $insert['pin_url'] = site_url("/application/assets/pins/$user_id/" . $image);
+
+            //Modification by vishnu@cubettech.com on 27-09-2013 starts here
+            $config['image_library'] = 'gd2';
+            $config['source_image'] = getcwd() . "/application/assets/pins/$user_id/" . $image;
+            //$config['create_thumb'] = TRUE;
+            $config['new_image'] = getcwd() . "/application/assets/pins/$user_id/thumb/" . $image;
+            $config['maintain_ratio'] = TRUE;
+            $config['width'] = 200;
+            $config['height'] = 200;
+
+            try {
+                $this->image_lib->initialize($config);
+                $this->image_lib->resize();
+            } catch (Exception $e) {
+                die($e->getMessage());
+            }
+            //Modification by vishnu@cubettech.com on 27-09-2013 ends here
+
             $id = $this->board_model->saveUploadPin($insert);
             if ($id) {
                 redirect('board/pins/' . $boardId . '/' . $id);
@@ -335,26 +355,40 @@ class Pins extends CI_Controller {
         set_time_limit(0); // Do not let the script time out
 
         include (getcwd() . '/application/controllers/simplehtmldom/simple_html_dom.php'); // include  the parser library
+       //Code added by Ansa<ansa@cubettech.com> on 08/10/2013..code starts here.
         //To get last segment from url
         $url = $_GET['url'];
         $url = rtrim($url, '/');
         preg_match('/([^\/]*)$/', $url, $match);
         $val = explode(".", $match[0]);
+
         //To display selected image in div 
         if (!empty($val[1])) {
+            //To check given input is image or not.
+            if (!empty($val[2])) {
+                 $jArray = array('description' => '', 'content' => '');
+                 echo json_encode($jArray);
+            } else {
+               $size = getimagesize($url);
+               if (!empty($size['mime'])) {
+                    $div .= '<div class="images">';
+                    $div .= '<img  src="' . $url . '" id="1" width="150"/>';
+                    $div .= '<input name="total_images" id="total_images" value="' . 1 . '" type="hidden"/>';
+                    $div .= '</div>';
 
-            $div .= '<div class="images">';
-            $div .= '<img  src="' . $url . '" id="1" width="150"/>';
-            $div .= '<input name="total_images" id="total_images" value="' . 1 . '" type="hidden"/>';
-            $div .= '</div>';
-
-            $jArray = array('description' => 'test', 'content' => $div);
-            echo json_encode($jArray);
+                    $jArray = array('description' => 'test', 'content' => $div);
+                    echo json_encode($jArray);
+                } else {
+                    $jArray = array('description' => '', 'content' => '');
+                    echo json_encode($jArray);
+                }
+            }
         } else {
+          //Code added by Ansa<ansa@cubettech.com> on 08/10/2013..code ends here. 
             //URL received via ajax
             $html = @file_get_html($url);
             // get DOM from URL fetched by ajax
-
+            
             foreach ($html->find('base') as $e)
                 ;
             $baseUrl = $e->href;
@@ -368,25 +402,30 @@ class Pins extends CI_Controller {
                 } else {
                     $imgSrc = self::InternetCombineUrl($url, $e->src);
                 }
+               
                 // Loop through all images and make sure only appropriate image size is fetched
                 // This will neglect icons , images from webpage layout etc
                 if (substr($imgSrc, 0, 7) == 'http://' || substr($imgSrc, 0, 8) == 'https://') { // Make sure image url starts by either http or https
                     $ImgSize = @getimagesize($imgSrc);
+                   // print_r($ImgSize);
                     // Get the size of current image
                     if ($ImgSize) {
                         if ($ImgSize[0] >= 100 && $ImgSize[1] >= 100) {
-
+                        // echo "test";
                             $images_url[] = $imgSrc;
                             // Add image to array stack
                         }
                     }
                 }
             }
+         
+     
             if (!empty($images_url)) {
-
+                //echo $images_url;
                 foreach ($html->find('meta[name=description]') as $e)
                     ; // Fetch Description from meta description of page
                 $description = $e->content;
+               //die;
                 //Fetch  Description from body of page
                 if (empty($description)) {
                     foreach ($body_elemnt as $elm) {
@@ -409,6 +448,9 @@ class Pins extends CI_Controller {
                     $div .= '<div id="totalimg">1 of ' . count($images_url) . '</div>';
                     // display total no. of images retrieved
                 }
+
+
+
                 // If image array contains images
                 $div .= '<div class="images">';
                 for ($i = 0; $i < count($images_url); $i++) {

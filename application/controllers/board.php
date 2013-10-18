@@ -329,18 +329,225 @@ class Board extends CI_Controller {
      * @since  : 10-04-2012
      * @return :
      */
+     /*
+     * Modified by Ansa<ansa@cubettech.com> on 10/10/2013.
+     */
     function savePin() {
+     
         $this->sitelogin->entryCheck();
         $pinArray = array();
         $pinArray['description'] = $this->input->post('details');
-        $pinArray['source_url'] = $this->input->post('link');
-        $pinArray['board_id'] = $newBoardId = $this->input->post('board');
-        $pinArray['gift'] = $this->input->post('gift') ? $this->input->post('gift') : 0;
+        $pinArray['gift'] =$this->input->post('gift_amount');
+        $pinArray['source_url'] = $this->input->post('current_img_src');
+        $pinArray['pin_url'] = $this->input->post('current_img_src');
+        $user_id = $this->session->userdata('login_user_id');
+        $remoteUrl = $pinArray['source_url'];
+        if ($remoteUrl) {
+            $dir = getcwd() . "/application/assets/pins/$user_id";
+            if (!file_exists($dir) || !is_dir($dir)) {
+                mkdir(getcwd() . "/application/assets/pins/$user_id", 0777);
+            }
 
+            $url_arr = explode('/', $remoteUrl);
+            $ct = count($url_arr);
+            $image = str_replace(' ', '_', time() . '_' . $url_arr[$ct - 1]);
+
+            file_put_contents(getcwd() . "/application/assets/pins/$user_id/" . $image, file_get_contents($remoteUrl));
+
+            $insert['pin_url'] = site_url("/application/assets/pins/$user_id/" . $image);
+
+            //Modification by vishnu@cubettech.com on 27-09-2013 starts here
+            $config['image_library'] = 'gd2';
+            $config['source_image'] = getcwd() . "/application/assets/pins/$user_id/" . $image;
+            //$config['create_thumb'] = TRUE;
+            $config['new_image'] = getcwd() . "/application/assets/pins/$user_id/thumb/" . $image;
+            $config['maintain_ratio'] = TRUE;
+            $config['width'] = 200;
+            $config['height'] = 200;
+        }
+
+        $pinArray['board_id'] = $newBoardId = $this->input->post('board');
+       // echo $pinArray['board_id'];die;
+        //$pinArray['gift'] = $this->input->post('gift') ? $this->input->post('gift') : 0;
         $oldBoardId = $this->input->post('oldBoardId');
         $pinId = $this->input->post('pinId');
         $return = $this->board_model->saveEditPin($pinId, $pinArray);
         redirect('board/pins/' . $newBoardId . '/' . $pinId);
+    }
+
+    /**
+     * Function to edit url link
+     * @param  : $_POST
+     * @author : Ansa<ansa@cubettech.com>.
+     * @since  : 09-10-2013
+     * @return :
+     */
+    function getImage() {
+        if(!empty($_POST)){
+        $url = $_POST['url'];
+        $desc = $_POST['desc'];
+        $gift = $_POST['gift'];
+        $pinId = $_POST['pinId'];
+        $boardId = $_POST['boardId'];
+        $url = rtrim($url, '/');
+        preg_match('/([^\/]*)$/', $url, $match);
+        $val = explode(".", $match[0]);
+
+        //To display selected image in div 
+        if (!empty($val[1])) {
+            //To check given input is image or not.
+            if (!empty($val[2])) {
+             
+                $jArray = array('description' => '', 'content' => '');
+                echo json_encode($jArray);
+            } else {
+                
+             $size = getImageSize($url);
+              if (!empty($size['mime'])) {
+                    //  $div .= '<span class="hideAll" ><div id="PinEditPreview" class="pin" style="margin-top: 105px; margin-right:25px;">';
+                    // $div .= '<img  src="' . $url . '" id="1" style="height: 144px;width:190px;"/>';
+                    $div .='<div class="images"><strong class="PriceContainer" id="priceDiv"></strong>';
+                    if(!empty($gift)){
+                        $div .='<strong class="PriceContainer_gift" id="priceDiv_gift">$ ' . $gift . '</strong>';
+                    }
+                    $div .= '<img  src="' . $url . '" id="1" style="height: 144px;width:190px;"/></div><div class="editDescription">
+                             <p id="postDescription" class="desc_preview"> ' . $desc . '</p>
+                             </div></span>';
+
+                    $jArray = array('description' => '', 'content' => $div);
+                    echo json_encode($jArray);
+                } else {
+                    $jArray = array('description' => '', 'content' => '');
+                    echo json_encode($jArray);
+                }
+            }
+        } else {
+
+            //URL received via ajax
+            $html = @file_get_html($url);
+            // get DOM from URL fetched by ajax
+            foreach ($html->find('base') as $e)
+                ;
+
+            $baseUrl = $e->href;
+
+            //Fetch images url and add it to an array
+            $images_url = array();
+            foreach ($html->find('img') as $e) {
+
+                if ($baseUrl) {
+                    $imgSrc = $baseUrl . $e->src;
+                } else {
+
+                    $imgSrc = self::InternetCombine($url, $e->src);
+                }
+                // Loop through all images and make sure only appropriate image size is fetched
+                // This will neglect icons , images from webpage layout etc
+
+                if (substr($imgSrc, 0, 7) == 'http://' || substr($imgSrc, 0, 8) == 'https://') { // Make sure image url starts by either http or https
+                    $ImgSize = @getimagesize($imgSrc);
+
+                    // Get the size of current image
+                    if ($ImgSize) {
+                        if ($ImgSize[0] >= 100 && $ImgSize[1] >= 100) {
+
+                            $images_url[] = $imgSrc;
+                            // Add image to array stack
+                        }
+                    }
+                }
+            }
+
+            $html->clear();
+            unset($html);
+
+            if (!empty($images_url)) {
+
+                if (count($images_url) > 1) {
+
+                    // If there's more than 1 image fetched , display the next and previous button
+                    $div = '<div><img src="' . base_url() . 'application/assets/images/prev.png" id="prev" alt=""/><img src="' . base_url() . 'application/assets/images/next.png" id="next" alt=""/></div>';
+                    $div .= '<div id="totalimg">1 of ' . count($images_url) . '</div>';
+                    // display total no. of images retrieved
+                }
+
+
+
+                // If image array contains images
+                $div .= '<div class="images"><strong class="PriceContainer" id="priceDiv"></strong>';
+               if(!empty($gift)){
+                $div .= '<strong class="PriceContainer_gift" id="priceDiv_gift" style="top:170px;">$ ' . $gift . '</strong>';
+               }
+                for ($i = 0; $i < count($images_url); $i++) {
+                    // Loop through each image and add appropriate image tag
+                    $y = $i + 1;
+
+                    $div .= '<img style="display: none;height: 144px;width:190px;" src="' . $images_url[$i] . '" id="' . $y .
+                            '" />';
+                }
+                $div .= '<input name="total_images" id="total_images" value="' . count($images_url) . '" type="hidden"/>';
+                //Add the total no. of images to this hidden input.It will be used later when user press next/previous button
+                $div .= '</div><div class="editDescription">
+                             <p id="postDescription" class="desc_preview"> ' . $desc . '</p>
+                             </div>';
+            }
+
+            $jArray = array('description' => '', 'content' => $div);
+            echo json_encode($jArray);
+        }
+        }
+    }
+
+    /**
+     * Private function to get  url when $baseurl is empty.this function is used in getImage().
+     * @param  : $_POST
+     * @author : Ansa<ansa@cubettech.com>.
+     * @since  : 10-10-2013
+     * @return :
+     */
+    private function InternetCombine($absolute, $relative) {
+        $p = parse_url($relative);
+        if ($p["scheme"])
+            return $relative;
+
+        extract(parse_url($absolute));
+
+        $path = dirname($path);
+
+        if ($relative{0} == '/') {
+            $cparts = array_filter(explode("/", $relative));
+        } else {
+            $aparts = array_filter(explode("/", $path));
+            $rparts = array_filter(explode("/", $relative));
+            $cparts = array_merge($aparts, $rparts);
+            foreach ($cparts as $i => $part) {
+                if ($part == '.') {
+                    $cparts[$i] = null;
+                }
+                if ($part == '..') {
+                    $cparts[$i - 1] = null;
+                    $cparts[$i] = null;
+                }
+            }
+            $cparts = array_filter($cparts);
+        }
+        $path = implode("/", $cparts);
+        $url = "";
+        if ($scheme) {
+            $url = "$scheme://";
+        }
+        if ($user) {
+            $url .= "$user";
+            if ($pass) {
+                $url .= ":$pass";
+            }
+            $url .= "@";
+        }
+        if ($host) {
+            $url .= "$host/";
+        }
+        $url .= $path;
+        return $url;
     }
 
     /**

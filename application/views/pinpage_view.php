@@ -48,7 +48,9 @@
                  <?php else:?>
                         <span class="popup_login">
                         <span class="buttonLogin">
-                             <?php if($this->session->userdata('login_user_id')==$pinDetails->user_id):?>
+                            <!--//Modified by Ansa<ansa@cubettech.com> on 17/10/2013-->
+                             <?php $repin = checkRepinExist($this->session->userdata('login_user_id'), $pinId); ?>
+                             <?php if($repin!=1 && $this->session->userdata('login_user_id')==$pinDetails->user_id):?>
                               <a style="color:#ffffff;" href="<?php echo site_url('board/pinEdit/'.$boardId.'/'.$pinId);?>">Edit pin</a>
                              <?php else:?>
                                 <?php $id_ref =$pinDetails->board_id;?>
@@ -188,10 +190,11 @@
                                     <a href="<?php echo site_url('user/index/'.$cmt->user_id)?>"><?php echo $commentuser['name']?></a> <?php echo $cmt->comments?>
                                 </p>
                                 <?php if($this->session->userdata('login_user_id')):?>
-                                    <?php if($cmt->user_id==$this->session->userdata('login_user_id')):?>
+                                <!--//Modified by Ansa<ansa@cubettech.com> on 17/10/2013.-->
+                                    <?php // if($cmt->user_id==$this->session->userdata('login_user_id')):?>
                                     <a data="<?php echo $cmt->id;?>" id="<?php echo "delete_".$cmt->id ?>" style="cursor: pointer;float: right;margin-right: 5px;"  onclick="deleteComment(<?php echo $cmt->id;?>)" title="Remove Comment" class="DeleteComment floatRight tipsyHover">X</a>
                                     <?php endif?>
-                                <?php endif?>
+                                <?php// endif?>
 
 
                             </div>
@@ -601,11 +604,12 @@
           $("textarea#"+value).val('');
     }
     </script>
+<!--    //Confirm box added by Ansa<ansa@cubettech.com> on 17/10/2013-->
     <script type="text/javascript">
     function deleteComment(value)
     {
           //var substr = value.split('_');
-
+          if (confirm("You won't be able to undo this.Do you Want to delete this comment?")) {
           dataString = 'id='+value;
           $.ajax({
                 url: "<?php echo site_url('board/deleteComment');?>",
@@ -623,6 +627,7 @@
                 //alert(substr[0]);
             }
             });
+            }
 
     }
     </script>

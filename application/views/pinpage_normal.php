@@ -479,8 +479,9 @@
                 </div>
 
                 <div class="PinImageHolder">
+                    <!--//Added style to Img src by Ansa<ansa@cubettech.com> on 11/10/2013-->
                     <?php if($pinDetails->type=='image'):?>
-                            <a href=""  data-id="<?php echo $pinDetails->id?>"><img src="<?php echo $pinDetails->pin_url?>" id="pinCloseupImage" alt="Pinned Image" /></a>
+                            <a href=""  data-id="<?php echo $pinDetails->id?>"><img src="<?php echo $pinDetails->pin_url?>" style="height: 250px;width:250px;" id="pinCloseupImage" alt="Pinned Image" /></a>
                        <?php else:?>
                             <?php $video = explode('=', $pinDetails->source_url);?>
                                 <iframe title="YouTube video player" width="500" height="390" src="http://www.youtube.com/embed/<?php echo $video[1];?>?wmode=opaque" frameborder="0" allowfullscreen></iframe>

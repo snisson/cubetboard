@@ -139,7 +139,7 @@
 </script>
 <?php if ($this->session->userdata('login_user_id')) { ?>
     <script type="text/javascript">
-                
+                    
         /* 
          * Code added by Rahul K Murali@Cubet Technologies
          * Add comment.
@@ -154,7 +154,7 @@
             $('a#comment-'+board_id).hide();
             $('a#uncomment-'+board_id).show();
             $('#'+board_id).show();
-                
+                    
             $('#comment_'+board_id).focus();
             var $alpha = $('#alpha');
             $alpha.imagesLoaded( function(){
@@ -166,21 +166,24 @@
                 });
             });
         });
-            
+                
         /* 
          * Code added by Rahul K Murali@Cubet Technologies
          * uncomment.
+         * modified by Vishnu <vishnu@cubettech.com> 
+         * @date 21-09-2013
          */
 
         $(".act_uncomment").live("click", function() {
             var string = $(this).attr('id');
             var substr = string.split('-');
             var board_id = substr[1];
-            $(".enter_comm").hide();
+            // $(".enter_comm").hide();
+            $("#"+board_id).hide();
             $('#'+board_id).empty();
             $('a#comment-'+board_id).show();
             $('a#uncomment-'+board_id).hide();
-                
+                    
             $('#comment_'+board_id).focus();
             var $alpha = $('#alpha');
             $alpha.imagesLoaded( function(){
@@ -192,7 +195,7 @@
                 });
             });
         });
-            
+                
     </script>
 <?php } ?>
 <div id="top"></div>
@@ -215,12 +218,23 @@
         <div class="container Mcenter clearfix transitions-enabled masonry" id="alpha" style="height: 6247px; width: 1392px;">
 
             <?php $boardPin = $row; ?>
-            <?php if (is_array($boardPin)): ?>
+            <?php
+            if (is_array($boardPin)):
+
+                $flag = 0;
+                ?>
                 <?php foreach ($boardPin as $boardPinKey => $boardPinValue): ?>
                     <?php $boardDetails = getBoardDetails($boardPinValue->board_id); ?>
-                    <?php $comments = getPinComments($boardPinValue->id); ?>
+        <?php $comments = getPinComments($boardPinValue->id); ?>
                     <div class="pin_item">
-                        <?php $this->load->view('popup_js'); ?>
+
+                        <?php
+                        if (strlen($boardPinValue->description) > 600) {
+                            $flag = 1;
+                        }
+
+                        $this->load->view('popup_js');
+                        ?>
                         <?php if (!$this->session->userdata('login_user_id')): ?>
                             <div class="action">
                                 <span id="like_action">
@@ -234,8 +248,11 @@
                                 <?php $likeId = 'like-' . $boardPinValue->id ?>
                                 <?php $unlikeId = 'unlike-' . $boardPinValue->id ?>
                                 <?php $like = $boardPinValue->user_id ?>
+                                <!--Code Added by Ansa<ansa@cubettech.com> on 16/10/2013-->
+                                <?php $repin = checkRepinExist($this->session->userdata('login_user_id'), $boardPinValue->id); ?>
                                 <span id="like_action<?php echo $boardPinValue->id; ?>">
-                                    <?php if ($boardPinValue->user_id == $this->session->userdata('login_user_id')): ?>
+                                <?php if ($boardPinValue->user_id == $this->session->userdata('login_user_id') && $repin != 1): ?>
+                                    
                                         <a href="<?php echo site_url('board/pinEdit/' . $boardPinValue->board_id . '/' . $boardPinValue->id) ?>" class="act_repin"><span>Edit</span></a>
                                     <?php else: ?>
 
@@ -317,14 +334,15 @@
                                             <img src="<?php echo $commentuser['image'] ?>" alt="user" />
                                         </a>
                                         <p>
-                                            <a href="<?php echo site_url('user/index/' . $cmt->user_id) ?>"><?php echo $commentuser['name'] ?></a> <?php echo $cmt->comments ?>
+                                            <a href="<?php echo site_url('user/index/' . $cmt->user_id) ?>"><?php echo $commentuser['name'] ?></a> <?php echo substr($cmt->comments, 0, 100);
+                echo strlen($cmt->comments) > 100 ? '.....' : ''; ?>
                                         </p>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div id="<?php echo $commentBoxId; ?>"></div>
-                        <?php endif ?>
+        <?php endif ?>
                         <div class="convo_blk enter_comm" id="<?php echo $boardPinValue->id; ?>"></div>
                         <div class="clear"></div>
 
@@ -333,12 +351,20 @@
 
 
                 <?php endforeach ?>
+                <?php
+                if ($flag == 1) {
+
+                    echo "<nav class='next-load' id='next_load_div'></nav>";
+                     $flag = 0;
+                }
+                ?>
             <?php endif ?>
         </div> <!-- #alpha -->
     </div>
 
 </div><!-- closing middlebanner -->
 <?php $this->load->view('footer'); ?>
+<script type="text/javascript" src="http://www.appelsiini.net/download/jquery.viewport.js"></script>
 <script type="text/javascript">
     $(function(){
 
@@ -403,6 +429,11 @@
             });
         }
     );
+    
+        $('a.ajax').click(function(){
+    
+            $('a.act_comment').show();
+        });
 
     });
 
@@ -413,7 +444,20 @@
 <script type="text/javascript">
 
     $(function() {
+        //$('.next-load:in-viewport').first().removeClass('next-load');
+        var delay = 1;
         $(window).scroll(function() {
+           
+            if(typeof $('.next-load:in-viewport').first().attr('id') != 'undefined' ) {
+                //$('.next-load:in-viewport').first().removeClass('next-load');
+                $('#next_load_div').remove();
+                if(delay == 1  ){
+                    $('#alpha').infinitescroll('retrieve');
+                    delay = 0;
+                    setTimeout(function(){delay=1;}, 2000);
+                }
+            }
+
             if($(this).scrollTop() != 0) {
                 $('.scroll_top').fadeIn();
             } else {
