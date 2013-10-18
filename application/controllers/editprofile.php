@@ -124,8 +124,10 @@ class Editprofile extends CI_Controller {
 
         }
            
-        $this->editprofile_model->saveProfile($_POST,$referenceId,$reference);
-        redirect('/editprofile');
+       //Code added by Ansa<ansa@cubettech.com> on 18/10/2013.To redirect home page after updation
+        $userid = $this->session->userdata('login_user_id');
+        $this->editprofile_model->saveProfile($_POST, $referenceId, $reference);
+        redirect('/user/index/'.$userid );
      }
      /**
      * Function load the use account confirm delete pop up
