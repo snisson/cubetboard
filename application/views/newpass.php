@@ -17,7 +17,7 @@
     <div class="FixedContainer">
             <?php if($success==1):?>
                 <div class="alert_messgae">
-                    <h2>Your password has been reset successfully..<a href="/ci/pinterest/login/handleLogin">Click <span class="error">here</span> to login</a></h2>
+                    <h2>Your password has been reset successfully..<a href="<?php echo site_url()?>login/handleLogin">Click <span class="error">here</span> to login</a></h2>
                 </div>
             <?php else:?>
                 <?php if($emailcheck==1):?>
