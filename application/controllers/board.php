@@ -33,7 +33,12 @@ class Board extends CI_Controller {
      */
     public function index($id = false) {
         $this->sitelogin->entryCheck();
-        $data['title'] = "Board pins";
+
+	    $boardDetails = getBoardDetails($id);
+        $userDetails = userDetails($boardDetails->user_id);
+	    
+	    $data['title'] = 'Board ' . $boardDetails->board_name . ' by ' . $userDetails['name'] . ' | Craftiana ';
+        
         $this->load->helper('pinterest_helper');
         $this->load->model('board_model');
         if ($id) {
@@ -203,6 +208,14 @@ class Board extends CI_Controller {
         $data['title'] = 'Pin page';
         $data['boardId'] = $boardId;
         $data['pinId'] = $pinId;
+       
+        $pinDetails = getPinDetails($pinId,$boardId);
+        $userDetails = userDetails($pinDetails->user_id);
+	    $boardDetails = getBoardDetails($boardId);
+	    
+	    $data['title'] = 'Pin by ' . $userDetails['name'] . ' on ' . $boardDetails->board_name . ' | Craftiana ';
+   
+       
         if ($action == 'view') {
             $this->load->view('pinpage_view', $data);
         } else {
