@@ -95,10 +95,10 @@ class Login_model extends CI_Model {
      * @since  : 20-03-2012
      * @return
      */
-    function saveProfile($_POST,$referenceId,$reference)
+    function saveProfile($POST,$referenceId,$reference)
     {
         $this->db->where($reference, "$referenceId");
-        $this->db->update('user', $_POST);
+        $this->db->update('user', $POST);
         //echo $this->db->last_query();
     }
     /*getPrimaryID
